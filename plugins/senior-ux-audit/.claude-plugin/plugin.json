@@ -1,0 +1,11 @@
+{
+  "name": "senior-ux-audit",
+  "version": "1.0.0",
+  "description": "Senior-level UI/UX audit of a complete website or web app, delivered as a severity-rated, scored, RICE-prioritized report grounded in Nielsen's heuristics, WCAG 2.2, and Core Web Vitals.",
+  "author": {
+    "name": "Aditya Pratap Singh",
+    "email": "adityapratap2307@gmail.com"
+  },
+  "homepage": "https://github.com/CreatorGhost/ghost-skills",
+  "keywords": ["ux", "ui", "audit", "accessibility", "wcag", "usability", "design-review"]
+}

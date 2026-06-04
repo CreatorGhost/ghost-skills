@@ -1,0 +1,23 @@
+{
+  "name": "ghost-skills",
+  "description": "A curated collection of installable Claude skills. Senior-grade, reference-backed skills you can drop into any project.",
+  "owner": {
+    "name": "Aditya Pratap Singh",
+    "email": "adityapratap2307@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "senior-ux-audit",
+      "source": "./plugins/senior-ux-audit",
+      "description": "Senior-level UI/UX audit of a complete website or web app: heuristic evaluation (Nielsen's 10), WCAG 2.2 accessibility, Core Web Vitals, visual hierarchy, responsive behavior, navigation/IA, forms and conversion friction — delivered as a severity-rated, scored, RICE-prioritized report.",
+      "author": {
+        "name": "Aditya Pratap Singh",
+        "email": "adityapratap2307@gmail.com"
+      },
+      "category": "design",
+      "homepage": "https://github.com/CreatorGhost/ghost-skills",
+      "version": "1.0.0",
+      "keywords": ["ux", "ui", "audit", "accessibility", "wcag", "design-review", "usability", "heuristic-evaluation", "core-web-vitals"]
+    }
+  ]
+}
