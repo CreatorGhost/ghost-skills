@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <img alt="skills" src="https://img.shields.io/badge/skills-1-8b5cf6">
+  <img alt="skills" src="https://img.shields.io/badge/skills-2-8b5cf6">
   <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-plugin-d97757">
   <img alt="platforms" src="https://img.shields.io/badge/platforms-web%20%C2%B7%20iOS%20%C2%B7%20Android%20%C2%B7%20desktop-2563eb">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-3fb950">
@@ -30,9 +30,10 @@ Add the marketplace once and install any skill with a single command, or copy a 
 
 ## 🧩 Skills
 
-| Skill | What it does | Platforms |
-|-------|--------------|-----------|
-| [**senior-ux-audit**](plugins/senior-ux-audit) | A principal-level UI/UX audit run from your codebase — heuristics, accessibility, performance vitals, and a severity-rated, prioritized report with a 30/60/90 roadmap. | Web · iOS · Android · Desktop |
+| Skill | What it does |
+|-------|--------------|
+| [**senior-ux-audit**](plugins/senior-ux-audit) | A principal-level UI/UX audit (web · iOS · Android · desktop) from your codebase — heuristics, accessibility, performance vitals, and a severity-rated, prioritized report with a 30/60/90 roadmap. |
+| [**agentic-ai-backend-audit**](plugins/agentic-ai-backend-audit) | A senior adversarial audit of an AI-agent-built / agentic backend — 18 lenses across access control, prompt & agent safety, PII & data leakage, reliability, observability/evals/governance, and AI code smells. Severity-rated, `file:line`-cited, ends in a Ship/Fix/Block verdict. |
 
 > _More skills are on the way. See [CONTRIBUTING.md](CONTRIBUTING.md) to add one._
 

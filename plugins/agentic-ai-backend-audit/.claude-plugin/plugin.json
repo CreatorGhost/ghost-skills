@@ -1,0 +1,11 @@
+{
+  "name": "agentic-ai-backend-audit",
+  "version": "2.0.0",
+  "description": "Senior adversarial audit of an AI-agent-built and/or agentic/LLM backend, run after an agent finishes a feature. 18 lenses across security & access control, prompt & agent safety, data protection & leakage (PII/PHI, RAG/embedding/log/cross-tenant), reliability, observability/evals/governance, and AI-authorship hygiene. Names each issue, cites file:line, warns 'this may cause <impact>', rates severity 0-4, and ends with a Ship/Fix-then-ship/Block verdict.",
+  "author": {
+    "name": "Aditya Pratap Singh",
+    "email": "adityapratap2307@gmail.com"
+  },
+  "homepage": "https://github.com/CreatorGhost/ghost-skills",
+  "keywords": ["audit", "backend", "security", "agentic-ai", "llm", "ai-agents", "prompt-injection", "pii", "data-leakage", "rag", "multi-tenant", "code-review", "owasp"]
+}
