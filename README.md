@@ -38,41 +38,65 @@ Add the marketplace once and install any skill with a single command, or copy a 
 
 ## 📦 Install
 
-### Plugin marketplace (recommended)
+Pick whichever fits your setup.
 
-In Claude Code:
+### 1. npx — installs to every AI agent on your machine
+
+Works with [SkillFish](https://github.com/knoxgraeme/skillfish) or [Vercel `skills`](https://github.com/vercel-labs/skills). One command detects the agents on your system (Claude Code, Cursor, Copilot, …) and installs the skill into each:
+
+```bash
+npx skillfish add CreatorGhost/ghost-skills
+# or
+npx skills add CreatorGhost/ghost-skills
+```
+
+List what the repo offers, or target one skill directly:
+
+```bash
+npx skills add CreatorGhost/ghost-skills --list
+npx skills add https://github.com/CreatorGhost/ghost-skills/tree/main/plugins/senior-ux-audit/skills/senior-ux-audit
+```
+
+### 2. Claude Code plugin marketplace
 
 ```text
 /plugin marketplace add CreatorGhost/ghost-skills
 /plugin install senior-ux-audit@ghost-skills
 ```
 
-> You can also add it from a local clone: `/plugin marketplace add /path/to/ghost-skills`.
+> Or from a local clone: `/plugin marketplace add /path/to/ghost-skills`.
 
-### Single skill (no plugin system)
+### 3. Manual copy
 
 ```bash
-# personal — available in every project
-cp -r plugins/senior-ux-audit/skills/senior-ux-audit ~/.claude/skills/
-
-# or project-local
-cp -r plugins/senior-ux-audit/skills/senior-ux-audit .claude/skills/
+cp -r plugins/senior-ux-audit/skills/senior-ux-audit ~/.claude/skills/   # all projects
+cp -r plugins/senior-ux-audit/skills/senior-ux-audit .claude/skills/     # this project only
 ```
 
-Then invoke with `/senior-ux-audit`, or just ask Claude to "audit the UI/UX."
+## 🚀 Invoke & use
 
-## 🚀 Usage
-
-Once installed, talk to Claude naturally:
+**Invoke it** — directly, or in plain language (Claude auto-loads it from the description):
 
 ```text
-Audit the UI/UX of this app
+/senior-ux-audit                          # explicit
+Audit the UI/UX of this app               # natural language
 Review my web app for accessibility (WCAG 2.2)
 Why isn't this checkout flow converting?
 Check the UX across all screens before launch
 ```
 
 Claude reads your codebase, runs the app locally where it can, and returns a severity-rated report with a prioritized fix list.
+
+### ✅ Best practices
+
+- **Run from the project root** so the skill reads your real components, styles, and routes — it audits the codebase, not a guess.
+- **Start your app first** (`npm run dev`, a simulator, etc.). A running app lets it verify contrast, focus order, responsive reflow, and loading/empty/error states that code alone can't show.
+- **Name the platform and depth** — e.g. *"deep audit of the iOS app"* vs *"quick scan of the landing page."* Deep audit (default) covers everything; quick scan is faster and narrower.
+- **Point it at the flows that matter** — *"focus on onboarding and checkout."* Findings are ranked by the business impact of the flow they sit in.
+- **Give context for sharper findings** — who the users are (jobs-to-be-done) and what you're optimizing for (conversion, retention, accessibility).
+- **Ask for the output you want** — a Markdown report (default) or the JSON variant for importing into a dashboard or tickets.
+- **Run it before launch and after building several screens** to catch consistency drift across the app.
+- **It's read-only** — it reports findings; ask it to *fix* them as a separate, explicit step.
 
 ## 📂 What's inside
 
