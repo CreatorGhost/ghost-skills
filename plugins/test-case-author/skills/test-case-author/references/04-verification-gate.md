@@ -1,16 +1,19 @@
 # 04 — Verification Gate: BEFORE you say it's fixed
 
-The single checklist that would have caught the green-but-broken-in-prod incident.
+The single checklist that would have caught the green-but-broken-in-prod incidents.
 "Tests pass" is **not** a synonym for "fixed." A fix is verified only when **all
-seven gates** below are green. If you can't tick one, you don't get to say "fixed" —
+nine gates** below are green. If you can't tick one, you don't get to say "fixed" —
 say "tests pass but unverified at gate N."
 
 This gate is the spine of the whole skill: it operationalizes the three-part rule
-(real artifact · content contract · seen red) and adds the production-reality checks.
+(real artifact · content contract · seen red), the production-reality checks, and
+— added in v1.1 — the **layer-coverage** checks that catch silent-skip patterns
+(UI never opened, prompt never run against a real model, wire shape never
+round-tripped).
 
 ---
 
-## The seven gates
+## The nine gates
 
 ### (a) I saw the test go RED on the broken code
 - The test failed **for the right reason** before the fix (or with the fix reverted/
@@ -67,6 +70,31 @@ This gate is the spine of the whole skill: it operationalizes the three-part rul
   of a success marker (a success log can be hidden by log level).
 - ✅ when: a spy/metric proves the real path executed and the degraded path stayed cold.
 
+### (h) The layers the change crosses are the layers the tests exercise
+- Cross-reference the **change-type → required-layers matrix** in
+  `references/03-coverage-checklist.md`. If the change is a prompt edit, a real-LLM
+  eval must exist. If it's a UI change, a real browser must have been opened. If it
+  spans frontend → backend, one test must round-trip the wire shape end-to-end.
+- The fail mode this catches is **Skipped Layer** + **Prompt-Without-Eval** +
+  **UI-Without-Browser** — silent gaps where the unit-test green tick stood in for
+  layers that were never touched.
+- ✅ when: you can name the test(s) that cover each row of the matrix row(s) your
+  change matches.
+
+### (i) Every skipped layer is DECLARED in the PR description
+- If a required layer genuinely can't be exercised in this PR (no eval rig, no
+  browser in CI, dependency not deployed), the PR description must say so in
+  literal text: *"UI not verified, reason: …"* / *"prompt behaviour unverified,
+  reason: …"* / *"wire-shape round-trip skipped, reason: …"*.
+- The point is **honest unverified > silent untested**. A reviewer can accept a
+  declared skip; they can't accept what they don't know about.
+- Empirical claims in the PR description also fall under this gate — any number
+  (size, latency, count, frequency) must either link to a measurement or be tagged
+  `[estimated, not measured]` (**Claim Without Measurement**).
+- ✅ when: the PR description contains either a measurement/test for every
+  empirical claim, or a labelled `[estimated, not measured]` / `unverified,
+  reason: …` line for everything that wasn't measured.
+
 ---
 
 ## Gate scorecard (paste into your report)
@@ -80,6 +108,8 @@ Verification gate — <change / feature>
 (e) Fix in SHIPPED artifact ................. [ ] PASS  [ ] FAIL  → <grep/version proof>
 (f) Telemetry: zero new errors .............. [ ] PASS  [ ] FAIL  → <window + metric>
 (g) Failure/fallback path did NOT fire ...... [ ] PASS  [ ] FAIL  → <counter/spy>
+(h) Required layers exercised ............... [ ] PASS  [ ] FAIL  → <matrix row + tests>
+(i) Skipped layers / claims DECLARED ........ [ ] PASS  [ ] FAIL  → <unverified line(s)>
 
 Verdict: VERIFIED  |  TESTS PASS BUT UNVERIFIED AT GATE(S) <n…>  |  NOT VERIFIED
 ```

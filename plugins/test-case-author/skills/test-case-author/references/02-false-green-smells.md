@@ -1,11 +1,17 @@
 # 02 — False-Green Smells
 
-A catalogue of the patterns that make a test **pass while the code is broken**. For
-each: the **smell**, **why it lies**, a **generalized example** (the passing-but-
-useless version → the bug-catching version), and the **fix**. These are the named
-failure modes from a real green-but-broken-in-prod incident, generalized into
-durable, cross-stack principles. When you spot one, treat the test as *not catching
-bugs* until corrected — the green tick is not evidence.
+A catalogue of **16 patterns** that make a test (or whole PR) **pass while the code
+is broken**. For each: the **smell**, **why it lies**, a **generalized example**
+(the passing-but-useless version → the bug-catching version), and the **fix**.
+These are the named failure modes from real green-but-broken-in-prod incidents,
+generalized into durable, cross-stack principles. When you spot one, treat the
+test as *not catching bugs* until corrected — the green tick is not evidence.
+
+The first 11 are about the test itself; **12–16** are about the *envelope around
+the test*: the layer that wasn't tested at all, the prompt that was never run
+against a real model, the UI that was never opened in a browser, the comment that
+doesn't match the test fixture, and the empirical claim with no measurement
+behind it. They are the ones that catch shipping-without-actually-testing.
 
 ---
 
@@ -265,6 +271,188 @@ because the code is racy, that's a bug to fix, not an assertion to soften.
 
 ---
 
+## 12. Skipped Layer *(silent layer skip)*
+
+**Smell.** The change crosses N pipeline layers — e.g. a frontend hook → API client
+→ wire shape → backend route → service → DB — but the tests cover M < N of them.
+The skipped layers are never named in the PR description; the green tick implies
+"tested" when it actually means "tested *somewhere*".
+
+**Why it lies.** Each layer has its own failure modes. A function can be perfectly
+unit-tested while its caller integrates it wrong, the wire shape it produces doesn't
+match what the consumer expects, or the dev server never started so the UI is
+shipped unseen. The unit-test green says nothing about the layers that were never
+exercised.
+
+**Generalized example.**
+```text
+# A change adds a new field to a request body.
+# Backend: Pydantic model has a unit test confirming the field validates.    ✅
+# Frontend: TS interface has a build error if the field is wrong.            ✅
+# Wire:    no test round-trips a real request through the route.             ❌ silent skip
+#
+# The field name was mis-cased (page_context vs pageContext).
+# Backend unit test green. Frontend types green. Every real call broken.
+```
+
+**Fix.** For every change, enumerate the layers it crosses (logic, wiring, wire
+shape, dependency I/O, UI, deployment) and tick each. Any layer that genuinely
+can't be exercised in this PR must be **declared skipped with a reason** in the PR
+description — never silently omitted. See the **change-type → required-layers
+matrix** in `references/03-coverage-checklist.md` and gate **(h)** in
+`references/04-verification-gate.md`.
+
+---
+
+## 13. Prompt-Without-Eval
+
+**Smell.** A prompt file (`*.yaml`, `*.txt`, a `system_prompt` string, an agent
+instruction block) is edited. The surrounding tests mock the LLM call. No real
+model was invoked with the new prompt before the change shipped.
+
+**Why it lies.** A prompt **is code** — it instructs the model to behave a specific
+way. Mocked tests prove the orchestration around the LLM works; they prove **nothing**
+about whether the model actually follows the new instructions. Prompt regressions
+(model ignores a rule, hallucinates a new shape, leaks a value the prompt said to
+redact, stops calling a required tool) are exactly the bugs a mocked suite can never
+catch.
+
+**Generalized example.**
+```text
+# system_prompt is updated to add:
+#   "Treat fields whose value is `***` as redacted secrets.
+#    Never echo them back to the user."
+#
+# All unit tests mock the LLM response → green.
+# Real production model ignores the instruction ~30% of the time and
+# echoes the redacted token. No test could have caught this without a
+# real-model call.
+```
+
+**Fix.** For any prompt edit, run the change against the **real model** on at least
+3 canonical cases (a golden question, the exact case the change targets, and at
+least one adversarial input). Paste the model's outputs into the PR description.
+If no eval rig exists in the repo, mark the change **prompt behaviour unverified**
+— a flag a reviewer can accept or reject. A prompt PR with no real-model evidence
+is not "tested".
+
+---
+
+## 14. UI-Without-Browser
+
+**Smell.** A frontend component, hook, page, route, or stylesheet is changed. The
+change ships without anyone starting the dev server, running an E2E test, or
+recording a screenshot/video of the new behaviour. The "tests pass" tick covers a
+render tree or a typed interface — not a rendered page in a real browser.
+
+**Why it lies.** Unit-rendered components don't catch hydration mismatches, SSR
+warnings, layout collisions, accessibility regressions, focus traps, animation
+glitches, or the way the change interacts with router/state/animation under
+concurrent rendering. Type-checks don't catch any of those either.
+
+**Generalized example.**
+```text
+# A hook is swapped from useLayoutEffect to useEffect to avoid an SSR warning.
+#   - TypeScript compiles cleanly       ✅
+#   - Component render test passes      ✅
+#   - No browser was opened             ❌
+#
+# The original useLayoutEffect was guarding against state writes from
+# aborted concurrent renders. The new useEffect timing introduces a
+# zombie registration when the parent unmounts mid-transition.
+# Never reproduced; never caught.
+```
+
+**Fix.** For any UI/frontend change, either (a) start the dev server, click through
+the changed feature, and attach a screenshot or short video to the PR, or (b) run a
+Playwright/Cypress test that drives the change in a real browser. If neither is
+possible in the current environment, mark the change **UI not verified in this PR
+because <reason>** in the PR description — explicit, not silent. A reviewer can
+accept that disclosure; they can't accept what they don't know about.
+
+---
+
+## 15. Comment-vs-Test Drift
+
+**Smell.** A code comment / docstring claims the function defends against scenario
+X — "DoS guard against pathological nested dicts", "prompt-injection defense via
+XML escape", "rate-limits hot tenants", "constant-time string compare to prevent
+timing attacks". The test that's supposed to prove it exercises a **different**
+scenario that happens to cross the same threshold incidentally.
+
+**Why it lies.** Tests pass for the wrong reason. The promised defense was never
+proven; only an adjacent property was checked. When the actual attack/condition
+hits, the code may or may not behave as the comment claims — but the test had no
+way to know. Worse, the comment now reads as evidence ("we have a test for this")
+when it isn't.
+
+**Generalized example.**
+```text
+# Code comment:
+#   "DoS guard against pathological nested dicts so a payload like
+#    {a: {a: {a: ...}}} can't burn CPU in the redactor before the
+#    byte-size cap would have caught it."
+
+# Implementation:
+def enforce(ctx):
+    if len(json.dumps(ctx)) > RAW_MAX: raise HTTP(413)
+
+# Test:
+def test_rejects_oversized_payload():
+    ctx = {"blob": "x" * (RAW_MAX + 1)}   # WIDE, not deep
+    with pytest.raises(HTTP) as e: enforce(ctx)
+    assert e.value.status == 413           # green for the wrong reason
+
+# A 31 KiB deeply-nested payload (under the byte cap) still reaches the
+# redactor — the exact scenario the comment claimed was prevented.
+```
+
+**Fix.** Read every "defends against X" / "guards Y" / "prevents Z" comment in the
+changed code. Map each claim to a test whose **fixture matches the scenario
+described** — not an adjacent one. If the comment says "deeply nested", the fixture
+is deeply nested. If the comment says "injection", the fixture contains an
+injection payload. If the test and the comment disagree, one of them is wrong;
+update whichever is wrong.
+
+---
+
+## 16. Claim Without Measurement
+
+**Smell.** A PR comment, design doc, or code comment makes an empirical claim —
+"this fits in ~1 KiB", "the request takes 30 ms", "we never hit the cap in
+practice", "users don't load more than 20 of these" — without a measurement script,
+fixture, or telemetry query that produces the number.
+
+**Why it lies.** The claim is asserted with the authority of a measurement but is
+actually an estimate from intuition. Reviewers (and future-you) read it as evidence;
+it isn't. Worse, if the number is wrong, no one will catch the gap because there
+is no test that would surface a regression.
+
+**Generalized example.**
+```text
+# PR description:
+#   "Introducing a 16 KiB size cap on the page-context block.
+#    The pilot page projection serializes to under 1 KiB, so we have
+#    plenty of headroom."
+#
+# Reality: nobody measured. The number was eyeballed from counting fields.
+# Six weeks later a new field is added that pushes the projection past
+# 4 KiB; nobody notices until a different page blows the cap.
+```
+
+**Fix.** Every empirical claim needs either:
+- (a) a test/script committed alongside the claim that **produces the number**
+  (e.g. `test_projection_serializes_under_1kib` or a `measure.py` whose output
+  is pasted into the PR), or
+- (b) an explicit `[estimated, not measured]` tag on the claim so reviewers know
+  they're reading a guess.
+
+A bare number without one of those is not allowed to stand. The skill should treat
+unmeasured claims in a PR description the same way it treats Liveness-Only
+assertions: a green-looking signal that proves nothing.
+
+---
+
 ## Quick triage
 
 When a suite is green but you don't trust it, scan in this order — these catch the
@@ -275,8 +463,16 @@ most green-but-broken bugs fastest:
 2. **Liveness-Only** — does every assertion check a *value/effect*, or just status/
    shape/non-null?
 3. **Never-Red** — was each regression test ever seen to fail on the broken code?
-4. **Untested Boundary** — are limits/encodings/empties/over-the-cap covered?
-5. **Mock Mirrors The Bug** — is there ≥1 contract/real-I/O test at the boundary?
-6. **Swallowed Failure** — does the code hide errors, and do tests assert the failure
+4. **Skipped Layer** — does the change cross more layers than the tests cover? Is
+   any skipped layer declared in the PR?
+5. **Untested Boundary** — are limits/encodings/empties/over-the-cap covered?
+6. **Comment-vs-Test Drift** — does the test fixture actually match the scenario the
+   code comment claims to defend?
+7. **Mock Mirrors The Bug** — is there ≥1 contract/real-I/O test at the boundary?
+8. **Swallowed Failure** — does the code hide errors, and do tests assert the failure
    path did *not* fire?
-7. **Stale Artifact** — is the fix in the *shipped* build and confirmed in telemetry?
+9. **Prompt-Without-Eval** — did a prompt change? Was the real model invoked?
+10. **UI-Without-Browser** — did UI change? Was the dev server / a browser ever opened?
+11. **Claim Without Measurement** — does any empirical claim in the PR have a number
+    backed by a script/fixture/telemetry?
+12. **Stale Artifact** — is the fix in the *shipped* build and confirmed in telemetry?

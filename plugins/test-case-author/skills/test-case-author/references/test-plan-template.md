@@ -22,9 +22,24 @@ Real shipped artifact under test: <exported fn / route / binary / built bundle>
   (NOT from my head or the code's current output)
 - **Non-goals:** <what this plan deliberately does not cover>
 
+## 1a. Change-type classification (from `03-coverage-checklist.md` §0a)
+- **Change types present in this PR:** <pure logic | I/O | prompt | UI | wire shape
+  | size cap | security guard | schema migration | deployment | observability>
+- **Required test layers (per matrix):** <list>
+- **Layers SKIPPED in this PR (with reason — gate (i)):**
+  - <e.g. "real-LLM eval: no eval rig in repo yet, prompt behaviour unverified">
+  - <e.g. "real browser: no Playwright in CI, UI verified manually with screenshot">
+
+## 1b. Empirical claims in the PR (gate (i) — claim without measurement)
+| Claim | Number | Backed by |
+|-------|--------|-----------|
+| <e.g. "projection fits in 1 KiB"> | <number> | <committed script / fixture / `[estimated]`> |
+
 ## 2. Risks (what could be silently wrong)
 - R1 — <risk> · likely smell: <Reconstructed Payload | Liveness-Only | Swallowed
-  Failure | Mock Mirrors Bug | Untested Boundary | Stale Artifact | …>
+  Failure | Mock Mirrors Bug | Untested Boundary | Skipped Layer | Prompt-Without-
+  Eval | UI-Without-Browser | Comment-vs-Test Drift | Claim Without Measurement |
+  Stale Artifact | …>
 - R2 — …
 
 ## 3. Red tests (one per risk; each MUST be seen to fail on broken code)
@@ -74,9 +89,10 @@ Real shipped artifact under test: <exported fn / route / binary / built bundle>
 - Real-run **logs/metrics** on the affected path show **zero new errors**: ☐
   → <window + metric>
 
-## 10. Verification gate (from 04-verification-gate.md)
+## 10. Verification gate (from 04-verification-gate.md — 9 gates)
 (a) Saw RED ☐  (b) Real artifact ☐  (c) Content contract ☐  (d) Real dependency ☐
 (e) Shipped artifact ☐  (f) Telemetry zero new errors ☐  (g) Failure path did NOT fire ☐
+(h) Required layers exercised ☐  (i) Skipped layers / claims DECLARED ☐
 
 ## Sign-off
 > Verdict: VERIFIED | TESTS PASS BUT UNVERIFIED AT GATE(S) <n…> | NOT VERIFIED

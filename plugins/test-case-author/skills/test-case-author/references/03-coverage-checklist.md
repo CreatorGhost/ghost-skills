@@ -10,6 +10,33 @@ Mark each box: `[x]` covered · `[ ]` gap · `[N/A]` not applicable (say why).
 
 ---
 
+## 0a. Change-type → required test layers *(do this BEFORE writing tests)*
+
+Different change types break in different layers. Pick the row(s) that match what
+you're shipping and treat the listed layers as the **floor** — anything below is
+shipping unseen. Skipped layers must be **named in the PR description** (gate (i)
+in `04-verification-gate.md`), never silently omitted (**Skipped Layer** smell).
+
+| Change type | Required test layer(s) | What "real" means here |
+|---|---|---|
+| **Pure-logic function** (no I/O, no LLM) | unit | the actual exported function, not a copy |
+| **Function that hits DB / file / external API** | unit + integration | real DB (testcontainers/dev), real or recorded API |
+| **Wire-shape change** (Pydantic / TS type / JSON Schema) | unit + contract round-trip | one test serialises in service A and deserialises in service B |
+| **Prompt edit** (`*.yaml`, system prompt, agent instruction) | unit + **real-LLM eval, N ≥ 3** | the real MaaS / cloud model, not a mocked LLM. Paste outputs in PR |
+| **Frontend component / hook / page / route** | unit + **real-browser session** | dev server up, click the feature, screenshot/video OR a Playwright run |
+| **Size / threshold / cap / quota** | unit + **measurement on realistic fixture** | a test that produces the actual byte/ms/count number and asserts headroom |
+| **Security guard** (redaction, escape, auth, CSRF, rate-limit) | one test per attack-surface the comment claims to defend | fixture matches the attack scenario in the comment, not an adjacent one (**Comment-vs-Test Drift**) |
+| **Schema / migration** | unit + round-trip on **old persisted rows** | a real DB migrated from an old snapshot, not a fresh schema |
+| **Deployment / build config** (Dockerfile, helm, CI) | smoke test in the **shipped image** | grep the built artifact for the change; run `--version` against the image |
+| **Observability change** (log field, trace tag, metric) | assert the field **appears in real output** | hit the route, scrape the log line / trace, grep for the field |
+
+Quick gut-check: if the row says "real-browser session" and you didn't open a
+browser, you haven't tested it yet — write down "UI not verified, reason: …" and
+move on with eyes open. The skill prefers an honest **unverified** to a silent
+**untested**.
+
+---
+
 ## 0. Contract gate (do this first)
 - [ ] I can state the **observable contract** in one line: `input → required output/effect`.
 - [ ] The expected value is derived from the **spec or the real dependency**, NOT from

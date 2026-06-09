@@ -136,9 +136,92 @@ is where the real bug lives, and it's the case a happy-path suite never writes.
 
 ---
 
+## Case E — The Feature Shipped Without Anyone Running It
+
+**Setup.** A change adds a new capability that crosses several layers: a frontend
+hook that captures page state, a new field on the request body, a backend handler
+that runs a redact-and-render pipeline on the captured state, and an updated
+system prompt that tells the model how to use the rendered block. Each layer has
+its own unit tests.
+
+**What shipped.** All unit tests green. The PR is opened with a description that
+includes empirical claims — "the projection fits in well under the size cap",
+"the prompt addition was validated manually" — and a few mlflow / log claims that
+turn out to be partly inaccurate. A reviewer notices several of the gaps within
+hours:
+- The frontend hook was never exercised in a real browser; nobody actually saw the
+  feature work.
+- The prompt change was never run against a real LLM; only mocked turns ran.
+- A code comment promised a defence against "pathological nested dicts", but the
+  test fixture for that defence was a *wide* payload, not a *deep* one.
+- A "1 KiB" size claim in the PR description was eyeballed from counting fields,
+  not measured.
+
+**Why the suite stayed green.** No tests were *wrong*; every test in the PR did
+exactly what it claimed at the layer it touched. The problem was that the layers
+where the feature actually lives — the *browser* for the hook, the *real model*
+for the prompt, a *deeply-nested* fixture for the DoS guard, an *actual byte
+count* for the size claim — were never exercised. The PR's footprint of green
+ticks formed an outline around the real risk surface.
+
+**The smells.**
+- **Skipped Layer** — change crosses N layers; tests cover M < N; the gap is
+  silent. Unit tests on the hook ≠ a browser session. Unit tests on the route ≠
+  a real-LLM eval.
+- **Prompt-Without-Eval** — the system_prompt was edited; the only LLMs that ran
+  against the change were mocks.
+- **UI-Without-Browser** — the React hook was swapped from `useLayoutEffect` to
+  `useEffect`; nobody started the dev server before shipping.
+- **Comment-vs-Test Drift** — the comment promised "DoS guard against deeply
+  nested dicts"; the test exercised a wide payload that happened to cross the
+  same byte cap.
+- **Claim Without Measurement** — empirical numbers in the PR description with
+  no committed script or fixture to back them.
+
+**The tests / disclosures that would have caught it.**
+```text
+# (a) Required layers — declare them up front
+#     Change types: UI hook, prompt edit, wire shape, size cap, security guard
+#     Required by matrix: real-browser session + real-LLM eval + wire round-trip +
+#                         measured size fixture + deep-nested attack fixture
+
+# (b) UI in a real browser
+playwright_test("page context attaches on send, clears on navigate")
+
+# (c) Real-LLM eval on the prompt change
+eval = run_model(prompt_v2, canonical_questions_3)
+assert eval.canonical_1.uses_page_context       # the case the prompt targets
+assert not eval.adversarial_1.echoes_redaction  # the case the prompt forbids
+
+# (d) Comment-matched fixture — deep, not wide
+deep = make_nested({"a": {...depth=1000}})
+with pytest.raises(HTTP413):
+    enforce_raw_size(deep)                       # the EXACT scenario the comment names
+
+# (e) The size claim, measured
+def test_finding_details_projection_under_1kib():
+    sample = sample_finding_payload()
+    size = len(project(sample).encode())
+    assert size < 1024                           # produces a real number; regresses if it grows
+
+# (f) Skipped layers / claims declared in the PR description
+# "UI verified manually with screenshot attached"
+# "real-LLM eval: no eval rig in repo yet, prompt behaviour unverified"
+```
+
+**Lesson.** Most green-but-broken bugs at this scale aren't bad assertions — they
+are **missing layers**. The unit test green tick lies by *implication*: it implies
+the feature was tested when it just means a piece of it was. The fix is to (1)
+map the change to required layers up front, (2) exercise each, and (3) for any
+layer you genuinely cannot exercise, **declare it unverified in the PR** so the
+reviewer can accept or reject the skip with eyes open. Honest *unverified* is
+infinitely better than silent *untested*.
+
+---
+
 ## The through-line
 
-In all four, the green tick proved only that *a test ran* — not that the *feature
+In all five, the green tick proved only that *a test ran* — not that the *feature
 works*. Each was caught by one principle:
 
 | Case | Failing principle | The fix in one line |
@@ -147,6 +230,8 @@ works*. Each was caught by one principle:
 | B | Retry masks the failure | Assert the real path's value + retry/fallback did not fire |
 | C | Mock mirrors a stale shape; swallow hides the error | Contract-test the real shape; assert malformed fails loud |
 | D | Boundary never exercised | Test at / under / over every limit |
+| E | Whole layers (browser, real LLM, deep payload) never exercised; claims unmeasured | Map change to required layers; declare every skipped layer in the PR |
 
 A test's only job is to **fail when the behavior is wrong**. If it can't fail, it's a
-lie — no matter how green the suite.
+lie — no matter how green the suite. And a PR's only job is to ship a change that
+**actually works** — if a layer wasn't tested, the PR has to say so out loud.
