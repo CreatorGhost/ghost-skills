@@ -31,6 +31,19 @@
       "homepage": "https://github.com/CreatorGhost/ghost-skills",
       "version": "2.0.0",
       "keywords": ["audit", "backend", "security", "agentic-ai", "llm", "ai-agents", "prompt-injection", "pii", "data-leakage", "rag", "multi-tenant", "code-review", "owasp"]
+    },
+    {
+      "name": "test-case-author",
+      "source": "./plugins/test-case-author",
+      "description": "Write test cases that actually catch bugs — not tests that go green while the shipped feature is broken in production. Teaches the senior discipline from a real green-but-broken incident: test the real artifact (never a reimplementation), assert the behavior/content contract (not liveness), prove red-before-green, hunt silent failures, contract-test the boundaries you don't control, cover edges and limits, and verify the fix in the shipped build and production telemetry. Language- and framework-agnostic, with a smell catalogue, coverage checklist, 7-gate verification, case studies, and a test-plan template.",
+      "author": {
+        "name": "Aditya Pratap Singh",
+        "email": "adityapratap2307@gmail.com"
+      },
+      "category": "engineering",
+      "homepage": "https://github.com/CreatorGhost/ghost-skills",
+      "version": "1.0.0",
+      "keywords": ["testing", "test-cases", "tdd", "test-coverage", "unit-tests", "integration-tests", "e2e", "contract-testing", "false-green", "mutation-testing", "red-green-refactor", "regression"]
     }
   ]
 }

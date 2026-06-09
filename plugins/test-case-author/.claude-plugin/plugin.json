@@ -1,0 +1,11 @@
+{
+  "name": "test-case-author",
+  "version": "1.0.0",
+  "description": "Write tests that actually catch bugs, not tests that go green while the feature is broken in production. Drives the real shipped artifact (never a reimplementation), asserts the behavior/content contract (not liveness), proves red-before-green, hunts swallowed failures, contract-tests the boundaries you don't control, and verifies the fix in the shipped build and production telemetry. Language- and framework-agnostic.",
+  "author": {
+    "name": "Aditya Pratap Singh",
+    "email": "adityapratap2307@gmail.com"
+  },
+  "homepage": "https://github.com/CreatorGhost/ghost-skills",
+  "keywords": ["testing", "test-cases", "tdd", "test-coverage", "unit-tests", "integration-tests", "e2e", "contract-testing", "false-green", "mutation-testing", "red-green-refactor", "regression"]
+}
