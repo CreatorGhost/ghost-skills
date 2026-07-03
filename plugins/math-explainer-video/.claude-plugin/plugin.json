@@ -1,0 +1,11 @@
+{
+  "name": "math-explainer-video",
+  "version": "1.0.0",
+  "description": "Build 3Blue1Brown-style visual, intuition-first math explainer videos with Manim — a complete, battle-tested YouTube pipeline: topic confirmation gates, Hinglish-native TTS narration (Sarvam) with per-sentence sync, free pre-render QA (static layout frames, AST narration audit, independent editor-agent review), the render→frame-critique→fix loop, music mixing verified by subtraction, chapter markers, mascot rules, thumbnail recipe, and every Manim gotcha that cost real hours.",
+  "author": {
+    "name": "Aditya Pratap Singh",
+    "email": "adityapratap2307@gmail.com"
+  },
+  "homepage": "https://github.com/CreatorGhost/ghost-skills",
+  "keywords": ["manim", "math", "video", "3blue1brown", "youtube", "animation", "tts", "education", "hinglish", "explainer"]
+}

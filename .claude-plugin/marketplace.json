@@ -44,6 +44,19 @@
       "homepage": "https://github.com/CreatorGhost/ghost-skills",
       "version": "1.0.0",
       "keywords": ["testing", "test-cases", "tdd", "test-coverage", "unit-tests", "integration-tests", "e2e", "contract-testing", "false-green", "mutation-testing", "red-green-refactor", "regression"]
+    },
+    {
+      "name": "math-explainer-video",
+      "source": "./plugins/math-explainer-video",
+      "description": "Build 3Blue1Brown-style visual, intuition-first math explainer videos with Manim — a complete, battle-tested YouTube pipeline: topic confirmation gates, TTS narration with per-sentence sync (Sarvam Hinglish / Deepgram English), free pre-render QA (static layout frames, AST narration audit, independent editor-agent review), the render→frame-critique→fix loop, music mixing verified by subtraction, chapter markers, mascot rules, thumbnail recipe, and every Manim gotcha that cost real hours.",
+      "author": {
+        "name": "Aditya Pratap Singh",
+        "email": "adityapratap2307@gmail.com"
+      },
+      "category": "content",
+      "homepage": "https://github.com/CreatorGhost/ghost-skills",
+      "version": "1.0.0",
+      "keywords": ["manim", "math", "video", "3blue1brown", "youtube", "animation", "tts", "education", "hinglish", "explainer"]
     }
   ]
 }
