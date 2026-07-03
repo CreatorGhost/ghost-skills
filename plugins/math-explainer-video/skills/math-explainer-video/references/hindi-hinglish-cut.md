@@ -20,6 +20,41 @@ maintaining that video, don't use it for new ones.
    idiom consistency ("twenty-two BY seven", never "over"), and a real heard-aloud ambiguity: "12-inch pizza,
    radius 6" needs the "pizza size = diameter" bridge or it sounds like a mistake.
 
+## 1a. WRITING the script — rhythm, not ratio (learned the hard way on video #2)
+Video #2 first shipped sounding "less natural" than video #1 despite following every vocabulary rule.
+The diagnosis: **naturalness lives in the RHYTHM — Hindi carries the teaching, English lands the
+punches.** Video #1 felt natural because its emotional peaks were whole-English punch lines; video #2
+had written every peak in Hindi ("r squared ही क्यों?") and it read as dubbed monotone.
+
+The pattern (write every chapter this way):
+- **Peaks go whole-English**: the intro hook question ("But have you ever stopped to ask — why r
+  squared?"), reveals ("That's it. That's the whole secret."), verdicts ("And that's how you know it's
+  true." / "Same answer, again." / "size beats count"), direct challenges ("Which one would YOU pick?"),
+  attention grabs ("Now watch this." / "Look at that." / "But don't just take my word for it").
+- **Explanation stays warm Hindi** between the peaks — चलो, देखो, सोचो ज़रा, मान लो carry the teaching.
+- **Alternate.** A block that is 100% Hindi frame + English nouns for 4+ sentences in a row is the
+  dubbed-monotone smell. It should sound like one person *thinking in two languages*, not translating.
+- Never write to a percentage. The old "~90% Hindi" note was a misreading — it produced the monotone.
+- QA additions: the **intro must contain ≥1 whole-English rhetorical hook**, and the editor-agent audit
+  must grade in BOTH directions — `too-English` AND `Hindi-fied punch line` (a peak that should be an
+  English punch but was written in Hindi) are both failures. Also: **a punch answers in the language of
+  its question** (English challenge → English verdict), and **escalation ladders keep one language**
+  ("Sixteen → Thirty-two → A thousand → A million", not switching mid-ladder).
+
+**Empirical patterns from real top teachers** (studied via yt-dlp Hindi auto-captions of Shobhit Nirwan
+10.5M / PW UDAAN / Ritik Mishra / Dear Sir intros — 2026-07; transcripts are the ground truth, re-pull
+when in doubt: `yt-dlp --skip-download --write-auto-subs --sub-langs hi <url>`):
+1. **Simulated student dialogue** — stage the viewer's objection and answer it: "अब आप कहोगे — ये तो
+   अभी भी ऊबड़-खाबड़ है, rectangle कहाँ है? Fair point।" Deploy at the exact moment the viewer WOULD
+   object. (Shobhit does this constantly: "एक बच्चा कहेगा भैया... मैंने कहा बहुत बढ़िया...")
+2. **Comprehension check-ins** at key reveals: "दिख रहा है ना?", "समझ आ रहा है?" — 2-3 per video, not
+   every block.
+3. **Empathy with the struggle** before teaching ("देखते ही दिमाग़ blank हो जाता है... मेरे को भी नहीं
+   आता" — then unpack). 4. **Stakes early** (PW opens with "4-5 marks पक्के इस chapter से").
+5. **Key claims repeated verbatim** as emphasis. 6. Their English = embedded terms + short catchphrases;
+   the warmth is ALL Hindi — so in our narrated-explainer format, English punch lines work only when
+   wrapped in these Hindi warmth devices.
+
 ## 1. The narration STYLE — natural bilingual-YouTuber Hinglish (not a percentage)
 It must sound like a real Hindi-medium teacher/YouTuber talking to students — **NOT** a translation.
 The owner rejected two extremes before landing here:
