@@ -118,6 +118,9 @@ correction), and confirm before resuming.
 5. **Critique loop (the bottleneck):** extract frames (tile 4-up with `mev_grid`), **Read them**
    (gotcha #9), fix overlaps/off-screen/clipping/dead-air, re-render until clean. If a fix doesn't
    show up in the re-render, it's the stale animation cache → `--disable_caching` (see manim-pipeline.md).
+   Then run the **CRAFT AUDIT** (`references/animation-craft.md`) — verb-match, no block-slides,
+   formula provenance, camera discipline, dead air, duration invariance — fix FAILs, re-verify. This is
+   what separates "renders correctly" from "feels 3b1b"; correctness-only passes ship stiff videos.
 6. **4K render** `-qk`. **Mix music** (Grant's Etude @ ~0.28, gotcha #7) + **compute chapters from the
    4K `.srt`** (timestamps shift 1–2 s between resolutions — always use the shipping render's srt).
 7. **Title — RESEARCH IT with Apify, don't guess.** Scrape real YouTube results for the topic in India
@@ -149,6 +152,7 @@ persists and transforms rather than fading to black). Details + research citatio
 - `assets/scene_template.py` — copy this to start a new video (self-contained, all helpers).
 - `scripts/build_helpers.sh` — render / extract-frames / mix-music / chapters / description helpers.
 - `references/manim-pipeline.md` — toolchain, exact commands, every gotcha (incl. the `tracker.duration` sync rule), scene patterns, the morph + side-flash recipes.
+- `references/animation-craft.md` — **the craft bar**: 3b1b's real idioms mined from his 2025–26 code (arc fans, teach-once-then-batch, camera-as-passenger, formulas made of the picture, timing table) + the pre-ship craft-audit checklist.
 - `references/hindi-hinglish-cut.md` — **the Hinglish narration playbook**: Sarvam/aditya, the natural-Hinglish style rules, native authoring (the default since video #2), the AST + independent-agent QA gates, workspace hygiene. (The EN→HI transform section is legacy, video #1 only.)
 - `references/mascot-root.md` + `assets/root_buddy.py` — **"Root"**, the channel mascot (√ with eyes): design, the reveal, and the RULE (show only for questions/headlines, slide off the instant equations/graphs draw), animated without touching audio.
 - `references/pedagogy-and-strategy.md` — script structure, the research findings, CBSE strategy, the market gap.
