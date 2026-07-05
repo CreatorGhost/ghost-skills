@@ -59,4 +59,10 @@ Read the smoke render's frames/clips beat by beat and grade each visual beat aga
 6. **Duration invariance** — plays inside each voiceover block must total ≤ ~0.9× the audio (blocks are
    audio-bound); if a craft addition exceeds the slack, the total duration shifts and music/chapters
    must be redone. Verify total duration unchanged after the pass.
+7. **Frame-bounds at END of block** — sample the LAST frame of each narration block (from the .srt cue
+   ends), not arbitrary mid-block timestamps: mid-block frames miss elements written late in the block.
+   Nothing may cross the frame edge. The tell-tale of a mispositioned stack is *empty space at the top +
+   content clipped at the bottom* (video #3 shipped this: a 4-line antiderivative stack anchored at
+   UP*1.6 pushed its last line off-screen). Budget stacked fraction-lines BEFORE writing: each MathTex
+   fraction ≈ 1.1–1.3 units tall; frame is 8 — 4 such lines need to start ≈ UP*2.6 with ≤0.5 buffs.
 Fix everything graded FAIL, re-render smoke, re-read the changed beats, THEN go 4K.

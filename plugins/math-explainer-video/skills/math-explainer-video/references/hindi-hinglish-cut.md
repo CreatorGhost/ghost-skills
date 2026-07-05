@@ -73,6 +73,32 @@ The rule:
   जहाँ भी कुछ change होता है... the teaching voice.
 - **Do NOT over-formalize**: symbol≠निशान, speed≠रफ़्तार; keep measure/plug/answer/question English.
 - "times" → **"into"** (Indian math idiom). Multiply read aloud is "into", not "times".
+- **THE GENERAL RULE — everything MATHEMATICAL goes in ENGLISH; Hindi carries only the warm teaching
+  frame.** (Owner directive, video #3, after too many one-off fixes: "why are we not getting a general
+  idea?") Concretely, ALWAYS English:
+  - **All numbers being read** — counts, values, ordinals, fractions: "four rectangles", "four से
+    eight", "width half", "hundred", "three traps", "first one / second". NEVER चार/आठ/सौ/तीन/आधी/पहला.
+    Exception: grammatical articles & idioms that aren't numbers being read — "एक promise" (=a),
+    "दोनों" (=both), "हर एक" (=each), "एक साथ" (=together), "एक ही" (=the same) stay Hindi.
+  - **Never write digits in narration text** ("0.22") — Sarvam may read them in Hindi; always write the
+    English words ("zero point two-two").
+  - **Directional/spatial/pointing words** — left, right, up, down, edge, top, bottom — NOT दाएँ/बाएँ/
+    दाईं/बाईं ("दाई बाई" is unintelligible via TTS).
+  - **Concrete on-screen descriptors** — "red pieces", "the blue rectangles" — NOT लाल टुकड़े.
+  - Math/technical terms, formulas, and peak punch lines (already covered above).
+  - **MATH-ACTION VERBS = English verb + Hindi light-verb** (owner, video #3 round 3: "error सिकुड़ती
+    जाती है" should be "error shrink होती जाती है"). The action word is English, the auxiliary is Hindi:
+    add करो (not जोड़ो) · shrink होती जाती है (not सिकुड़ती) · slide कर दो (not खिसका दो) · settle हो
+    जाता है (not टिक जाता) · stretch होकर (not खिंचकर) · trap हो गया (not फँसा) · measure करो (not
+    नापो/मापो) · fill कर दो (not भर दो) · reverse चलाओ (not उल्टा चलाओ) · thinner करते जाओ (not पतला
+    करो) · decoration (not सजावट). Everyday non-math verbs (डालो, देखो, रखो, चलो, बढ़ाओ) stay Hindi —
+    it's the verbs describing what the MATH is doing that go English.
+  Litmus test before shipping any line: *if a word tells the viewer WHAT to look at, WHERE to look,
+  HOW MUCH, or WHAT THE MATH IS DOING — it's English. If it's the teacher's warmth between those words —
+  it's Hindi.* (Nuance: दाएँ/बाएँ are always English left/right — unintelligible via TTS — but ऊपर/नीचे
+  inside warm flow like "curve के नीचे" are universal and fine.)
+  ⚠️ Sweep for violations with a script (Devanagari number-words + digits + direction words), and mind
+  false positives: "दो" in भर दो / खिसका दो / कर दो is the verb "do", not the number two.
 - **On-screen labels/headings stay English** (chapter titles, formula labels). Only the SPOKEN track is Hinglish.
 - Write **Devanagari for Hindi + Latin for English terms** — Sarvam bulbul:v3 code-switches this perfectly.
 
