@@ -1,0 +1,11 @@
+{
+  "name": "ai-video-dubbing",
+  "version": "1.0.0",
+  "description": "Build or debug an AI video dubbing/recap pipeline where the translated voiceover lands on the right moment on screen. Battle-tested on Chinese short-drama / manhua / donghua -> English. The AI (STT/translate/TTS) is the easy part; timing is the whole game. Encodes the winning architecture (burned-in subtitle OCR as ground-truth timing -> isometric syllable-budget translation -> timestamp-anchored TTS with a NO-SLOW fit policy -> mux), the ASR dual-pass (mix + demucs vocal stem) coverage fix, a catalogue of sync failure modes with numeric limits, and the validation methodology that never lies (extract the frame + transcribe the OUTPUT audio).",
+  "author": {
+    "name": "Aditya Pratap Singh",
+    "email": "adityapratap2307@gmail.com"
+  },
+  "homepage": "https://github.com/CreatorGhost/ghost-skills",
+  "keywords": ["dubbing", "video", "ai-dubbing", "recap", "audio-video-sync", "isochrony", "isometric-translation", "subtitle-ocr", "asr", "tts", "deepgram", "whisper", "rapidocr", "demucs", "translation", "chinese", "faceless-youtube", "lip-sync", "voiceover", "manhua", "donghua"]
+}
