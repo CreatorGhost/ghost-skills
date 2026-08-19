@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <img alt="skills" src="https://img.shields.io/badge/skills-2-8b5cf6">
+  <img alt="skills" src="https://img.shields.io/badge/skills-6-8b5cf6">
   <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-plugin-d97757">
   <img alt="platforms" src="https://img.shields.io/badge/platforms-web%20%C2%B7%20iOS%20%C2%B7%20Android%20%C2%B7%20desktop-2563eb">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-3fb950">
@@ -34,8 +34,12 @@ Add the marketplace once and install any skill with a single command, or copy a 
 |-------|--------------|
 | [**senior-ux-audit**](plugins/senior-ux-audit) | A principal-level UI/UX audit (web · iOS · Android · desktop) from your codebase — heuristics, accessibility, performance vitals, and a severity-rated, prioritized report with a 30/60/90 roadmap. |
 | [**agentic-ai-backend-audit**](plugins/agentic-ai-backend-audit) | A senior adversarial audit of an AI-agent-built / agentic backend — 18 lenses across access control, prompt & agent safety, PII & data leakage, reliability, observability/evals/governance, and AI code smells. Severity-rated, `file:line`-cited, ends in a Ship/Fix/Block verdict. |
+| [**test-case-author**](plugins/test-case-author) | Writes tests that catch real bugs. It tests the shipped artifact, asserts behavior instead of liveness, proves red before green, covers boundaries and silent failures, and verifies the fix in the built product. |
+| [**math-explainer-video**](plugins/math-explainer-video) | Builds intuition-first math explainer videos with Manim, including scripts, synced English or Hinglish narration, pre-render QA, frame critique, 4K output, music, chapters, and thumbnails. |
+| [**ai-video-dubbing**](plugins/ai-video-dubbing) | Builds and debugs translated video dubbing and recap pipelines, with subtitle-timed translation, timestamp-anchored TTS, sync diagnostics, and checks against the final rendered video. |
+| [**unslop**](plugins/unslop) | Edits prose to remove AI writing habits while preserving meaning, tone, rhythm, and a distinct human voice. |
 
-> _More skills are on the way. See [CONTRIBUTING.md](CONTRIBUTING.md) to add one._
+See [CONTRIBUTING.md](CONTRIBUTING.md) to add another skill.
 
 ## 📦 Install
 
@@ -56,6 +60,7 @@ List what the repo offers, or target one skill directly:
 ```bash
 npx skills add CreatorGhost/ghost-skills --list
 npx skills add https://github.com/CreatorGhost/ghost-skills/tree/main/plugins/senior-ux-audit/skills/senior-ux-audit
+npx skills add https://github.com/CreatorGhost/ghost-skills/tree/main/plugins/test-case-author/skills/test-case-author
 ```
 
 ### 2. Claude Code plugin marketplace
@@ -63,6 +68,11 @@ npx skills add https://github.com/CreatorGhost/ghost-skills/tree/main/plugins/se
 ```text
 /plugin marketplace add CreatorGhost/ghost-skills
 /plugin install senior-ux-audit@ghost-skills
+/plugin install agentic-ai-backend-audit@ghost-skills
+/plugin install test-case-author@ghost-skills
+/plugin install math-explainer-video@ghost-skills
+/plugin install ai-video-dubbing@ghost-skills
+/plugin install unslop@ghost-skills
 ```
 
 > Or from a local clone: `/plugin marketplace add /path/to/ghost-skills`.
@@ -74,30 +84,37 @@ cp -r plugins/senior-ux-audit/skills/senior-ux-audit ~/.claude/skills/   # all p
 cp -r plugins/senior-ux-audit/skills/senior-ux-audit .claude/skills/     # this project only
 ```
 
+Replace `senior-ux-audit` with the skill you want to install.
+
 ## 🚀 Invoke & use
 
-**Invoke it** — directly, or in plain language (Claude auto-loads it from the description):
+Invoke a skill directly, or describe the job in plain language. Claude can load the matching skill from its description.
 
 ```text
-/senior-ux-audit                          # explicit
-Audit the UI/UX of this app               # natural language
-Review my web app for accessibility (WCAG 2.2)
-Why isn't this checkout flow converting?
-Check the UX across all screens before launch
+/senior-ux-audit
+/agentic-ai-backend-audit
+/test-case-author
+/math-explainer-video
+/ai-video-dubbing
+/unslop
+
+Audit the UI/UX of this app
+Review this agentic backend before I ship it
+Write regression tests that prove this bug is fixed
+Make a Manim explainer about the Fourier transform
+Fix the voiceover drift in this translated video
+Make this draft sound like a person wrote it
 ```
 
-Claude reads your codebase, runs the app locally where it can, and returns a severity-rated report with a prioritized fix list.
+Each plugin README documents its workflow, requirements, and output.
 
 ### ✅ Best practices
 
-- **Run from the project root** so the skill reads your real components, styles, and routes — it audits the codebase, not a guess.
-- **Start your app first** (`npm run dev`, a simulator, etc.). A running app lets it verify contrast, focus order, responsive reflow, and loading/empty/error states that code alone can't show.
-- **Name the platform and depth** — e.g. *"deep audit of the iOS app"* vs *"quick scan of the landing page."* Deep audit (default) covers everything; quick scan is faster and narrower.
-- **Point it at the flows that matter** — *"focus on onboarding and checkout."* Findings are ranked by the business impact of the flow they sit in.
-- **Give context for sharper findings** — who the users are (jobs-to-be-done) and what you're optimizing for (conversion, retention, accessibility).
-- **Ask for the output you want** — a Markdown report (default) or the JSON variant for importing into a dashboard or tickets.
-- **Run it before launch and after building several screens** to catch consistency drift across the app.
-- **It's read-only** — it reports findings; ask it to *fix* them as a separate, explicit step.
+- **Run code-focused skills from the project root** so they inspect the real implementation and build output.
+- **Provide the real artifact** when using a media skill. For dubbing, include the source video. For a math explainer, specify the topic, audience, language, and target length.
+- **Name the scope**. Point audits at the changed files or important flows, and tell the test author which behavior failed.
+- **Check each plugin's requirements** before starting. The video skills need local media tools and may need API keys for speech or image services.
+- **Treat audit results as read-only**. Ask for implementation in a separate step when you want the reported issues fixed.
 
 ## 📂 What's inside
 
@@ -106,13 +123,19 @@ ghost-skills/
 ├── .claude-plugin/
 │   └── marketplace.json              # marketplace registry
 ├── plugins/
-│   └── senior-ux-audit/              # one plugin per skill
+│   ├── senior-ux-audit/
+│   ├── agentic-ai-backend-audit/
+│   ├── test-case-author/
+│   ├── math-explainer-video/
+│   ├── ai-video-dubbing/
+│   └── unslop/
 │       ├── .claude-plugin/plugin.json
 │       ├── README.md
-│       └── skills/senior-ux-audit/
-│           ├── SKILL.md              # the skill
-│           └── references/
-│               └── report-template.md
+│       └── skills/<skill-name>/
+│           ├── SKILL.md               # skill instructions
+│           ├── references/            # supporting playbooks
+│           ├── scripts/               # optional helpers
+│           └── assets/                # optional templates
 ├── CONTRIBUTING.md
 └── LICENSE
 ```

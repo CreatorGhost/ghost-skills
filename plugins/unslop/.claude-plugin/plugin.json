@@ -1,0 +1,11 @@
+{
+  "name": "unslop",
+  "version": "1.0.0",
+  "description": "Edit prose to remove common signs of AI-generated writing while preserving meaning, tone, and a distinct human voice.",
+  "author": {
+    "name": "Aditya Pratap Singh",
+    "email": "adityapratap2307@gmail.com"
+  },
+  "homepage": "https://github.com/CreatorGhost/ghost-skills",
+  "keywords": ["writing", "editing", "humanize", "plain-language", "style", "ai-writing"]
+}

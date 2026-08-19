@@ -70,6 +70,19 @@
       "homepage": "https://github.com/CreatorGhost/ghost-skills",
       "version": "1.0.0",
       "keywords": ["dubbing", "video", "ai-dubbing", "recap", "audio-video-sync", "isochrony", "isometric-translation", "subtitle-ocr", "asr", "tts", "deepgram", "whisper", "rapidocr", "demucs", "translation", "chinese", "faceless-youtube", "lip-sync", "voiceover", "manhua", "donghua"]
+    },
+    {
+      "name": "unslop",
+      "source": "./plugins/unslop",
+      "description": "Edit prose to remove common signs of AI-generated writing while preserving meaning, tone, and a distinct human voice. Catches puffery, filler, vague claims, canned transitions, forced lists, jargon, passive constructions, and formatting habits that make text feel machine-made.",
+      "author": {
+        "name": "Aditya Pratap Singh",
+        "email": "adityapratap2307@gmail.com"
+      },
+      "category": "writing",
+      "homepage": "https://github.com/CreatorGhost/ghost-skills",
+      "version": "1.0.0",
+      "keywords": ["writing", "editing", "humanize", "plain-language", "style", "ai-writing"]
     }
   ]
 }
