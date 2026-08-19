@@ -43,11 +43,32 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) to add another skill.
 
 ## 📦 Install
 
-Pick whichever fits your setup.
+Choose the method that fits your setup. The Claude Code marketplace is the simplest way to install and update these skills as plugins.
 
-### 1. npx — installs to every AI agent on your machine
+### 1. Claude Code marketplace
 
-Works with [SkillFish](https://github.com/knoxgraeme/skillfish) or [Vercel `skills`](https://github.com/vercel-labs/skills). One command detects the agents on your system (Claude Code, Cursor, Copilot, …) and installs the skill into each:
+Add the marketplace once:
+
+```text
+/plugin marketplace add CreatorGhost/ghost-skills
+```
+
+Then install any skill:
+
+| Skill | Install command |
+|-------|-----------------|
+| `senior-ux-audit` | `/plugin install senior-ux-audit@ghost-skills` |
+| `agentic-ai-backend-audit` | `/plugin install agentic-ai-backend-audit@ghost-skills` |
+| `test-case-author` | `/plugin install test-case-author@ghost-skills` |
+| `math-explainer-video` | `/plugin install math-explainer-video@ghost-skills` |
+| `ai-video-dubbing` | `/plugin install ai-video-dubbing@ghost-skills` |
+| `unslop` | `/plugin install unslop@ghost-skills` |
+
+To install all six, run every install command in the table after adding the marketplace. From a local clone, use `/plugin marketplace add /path/to/ghost-skills` instead.
+
+### 2. npx for multiple AI agents
+
+[SkillFish](https://github.com/knoxgraeme/skillfish) and [Vercel `skills`](https://github.com/vercel-labs/skills) can discover the skill folders in this repository and install them for supported agents.
 
 ```bash
 npx skillfish add CreatorGhost/ghost-skills
@@ -55,36 +76,33 @@ npx skillfish add CreatorGhost/ghost-skills
 npx skills add CreatorGhost/ghost-skills
 ```
 
-List what the repo offers, or target one skill directly:
+List the available skills before choosing one:
 
 ```bash
 npx skills add CreatorGhost/ghost-skills --list
-npx skills add https://github.com/CreatorGhost/ghost-skills/tree/main/plugins/senior-ux-audit/skills/senior-ux-audit
-npx skills add https://github.com/CreatorGhost/ghost-skills/tree/main/plugins/test-case-author/skills/test-case-author
 ```
 
-### 2. Claude Code plugin marketplace
+Install one skill directly by setting `skill_name` to a name from the table:
 
-```text
-/plugin marketplace add CreatorGhost/ghost-skills
-/plugin install senior-ux-audit@ghost-skills
-/plugin install agentic-ai-backend-audit@ghost-skills
-/plugin install test-case-author@ghost-skills
-/plugin install math-explainer-video@ghost-skills
-/plugin install ai-video-dubbing@ghost-skills
-/plugin install unslop@ghost-skills
+```bash
+skill_name=unslop
+npx skills add "https://github.com/CreatorGhost/ghost-skills/tree/main/plugins/$skill_name/skills/$skill_name"
 ```
-
-> Or from a local clone: `/plugin marketplace add /path/to/ghost-skills`.
 
 ### 3. Manual copy
 
+Clone the repository, then copy a skill into your global or project-level skills directory:
+
 ```bash
-cp -r plugins/senior-ux-audit/skills/senior-ux-audit ~/.claude/skills/   # all projects
-cp -r plugins/senior-ux-audit/skills/senior-ux-audit .claude/skills/     # this project only
+git clone https://github.com/CreatorGhost/ghost-skills.git
+cd ghost-skills
+skill_name=unslop
+cp -r "plugins/$skill_name/skills/$skill_name" ~/.claude/skills/
+# or, for the current project only
+cp -r "plugins/$skill_name/skills/$skill_name" .claude/skills/
 ```
 
-Replace `senior-ux-audit` with the skill you want to install.
+Change `skill_name` to install a different skill.
 
 ## 🚀 Invoke & use
 
