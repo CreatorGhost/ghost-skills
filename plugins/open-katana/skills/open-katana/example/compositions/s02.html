@@ -1,0 +1,58 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s02-not { font-size: 290px; left: 660px; top: 250px; }
+    #s02-ready { font-size: 290px; left: 470px; top: 510px; }
+    #s02-meter { left: 720px; top: 820px; width: 560px; height: 60px; }
+    #s02-meter-box { position: absolute; left: 0; top: 34px; width: 400px; height: 20px; border: 3px solid var(--ink); border-radius: 5px; }
+    #s02-meter-fill { position: absolute; left: 3px; top: 3px; width: 10px; height: 8px; background: var(--lime); transform-origin: 0 50%; box-shadow: 0 0 12px rgba(198, 243, 31, .7); }
+    #s02-p14, #s02-p0 { position: absolute; left: 418px; top: 34px; color: var(--ink); }
+    #s02-err { position: absolute; left: 478px; top: 34px; color: var(--pink); }
+  </style>
+  <div id="root" data-composition-id="s02" data-width="1920" data-height="1080">
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s02-drift" class="drift">
+        <div id="s02-world" class="world">
+          <div id="s02-not" class="abs hero ink">NOT</div>
+          <div id="s02-ready" class="abs hero lime">READY</div>
+          <div id="s02-meter" class="abs">
+            <div class="mono">● READINESS</div>
+            <div id="s02-meter-box"><div id="s02-meter-fill"></div></div>
+            <div id="s02-p14" class="mono">14%</div>
+            <div id="s02-p0" class="mono">0%</div>
+            <div id="s02-err" class="mono">ERR</div>
+          </div>
+        </div>
+      </div>
+      <div id="s02-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s02");
+      const NOT = c(2, 3) - 0.06, READY = c(2, 4) - 0.04, GO = c(2, 6) + 0.16;
+      // centre of the "O" in NOT, from the font's own metrics (Archivo Black: N .833em, O .833em, tracking -.01em; baseline .784em)
+      const OX = 660 + 290 * (0.823 + 0.4165), OY = 250 + 290 * 0.44;
+      K.drift(tl, "#s02-drift", 2.06, { rotationY: 6, rotationX: -3 }, { rotationY: -3, rotationX: 2 });
+      tl.fromTo("#s02-world", { scale: 0.55, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "expo.out" }, 0);
+      // NOT snaps in from the left, READY stretches up from below
+      tl.fromTo("#s02-not", { x: -700, skewX: -24, opacity: 0, filter: "blur(18px)" }, { x: 0, skewX: 0, opacity: 1, filter: "blur(0px)", duration: 0.26, ease: "expo.out" }, NOT);
+      tl.fromTo("#s02-ready", { y: 260, scaleY: 2.2, opacity: 0, transformOrigin: "50% 100%" }, { y: 0, scaleY: 1, opacity: 1, duration: 0.3, ease: "back.out(1.8)" }, READY);
+      tl.fromTo("#s02-ready", { filter: "blur(14px)" }, { filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, READY);
+      // the readiness meter gets to 14%, gives up, and errors
+      tl.fromTo("#s02-meter", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.2, ease: "power3.out" }, READY + 0.14);
+      tl.fromTo("#s02-meter-fill", { scaleX: 0 }, { scaleX: 5.4, duration: 0.3, ease: "power2.out" }, READY + 0.22);
+      tl.to("#s02-meter-fill", { scaleX: 0, duration: 0.18, ease: "power2.in" }, READY + 0.6);
+      tl.fromTo("#s02-p14", { opacity: 0 }, { opacity: 1, duration: 0.001 }, READY + 0.24); tl.set("#s02-p14", { opacity: 0 }, READY + 0.76);
+      tl.fromTo("#s02-p0", { opacity: 0 }, { opacity: 1, duration: 0.001 }, READY + 0.76);
+      tl.fromTo("#s02-err", { opacity: 0, scale: 1.8 }, { opacity: 1, scale: 1, duration: 0.16, ease: "back.out(3)" }, READY + 0.8);
+      // the comet leaves the caption, hits the O, and the camera goes straight through it
+      K.fly(tl, "#s02-comet", { x: 560, y: 172 }, { x: OX, y: OY }, GO, 0.2, { ease: "power2.in" });
+      K.hit(tl, "[data-composition-id='s02'] .stage", GO + 0.2, 14);
+      tl.set("#s02-world", { transformOrigin: `${OX}px ${OY}px` }, GO + 0.2);
+      tl.to("#s02-world", { scale: 70, duration: 0.46, ease: "power3.in" }, GO + 0.22);
+      window.__timelines["s02"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,45 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s19-one { left: 0; top: 190px; width: 1920px; text-align: center; font-size: 280px; }
+    #s19-prompt { left: 0; top: 450px; width: 1920px; text-align: center; font-size: 300px; }
+    #s19-rule { left: 300px; top: 762px; width: 1320px; height: 8px; }
+    #s19-end { left: 0; top: 836px; width: 1920px; text-align: center; font-size: 44px; letter-spacing: .32em; color: var(--ink); }
+  </style>
+  <div id="root" data-composition-id="s19" data-width="1920" data-height="1080">
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s19-drift" class="drift">
+        <div id="s19-world" class="world">
+          <div id="s19-one" class="abs hero ink">ONE</div>
+          <div id="s19-prompt" class="abs hero lime">PROMPT.</div>
+          <div id="s19-rule" class="line"></div>
+          <div id="s19-end" class="abs mono">AND THAT'S IT.</div>
+          <div id="s19-burst" class="burst"></div>
+        </div>
+      </div>
+      <div id="s19-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s19");
+      const ONE = c(18, 1) - 0.03, PROMPT = c(18, 2) - 0.03, AND = c(19, 1) - 0.04, IT = c(19, 3) + 0.2;
+      // the film's last drift is slow and stops: the end card is still
+      tl.fromTo("#s19-drift", { rotationY: -7, rotationX: 4 }, { rotationY: 0, rotationX: 0, duration: 2.6, ease: "power2.out" }, 0);
+      K.slam(tl, "#s19-one", ONE, { from: 3, d: 0.3 });
+      tl.fromTo("#s19-prompt", { y: 320, scaleY: 2.4, opacity: 0, transformOrigin: "50% 100%" }, { y: 0, scaleY: 1, opacity: 1, duration: 0.32, ease: "back.out(1.8)" }, PROMPT);
+      tl.fromTo("#s19-prompt", { filter: "blur(16px)" }, { filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, PROMPT);
+      gsap.set("#s19-burst", { x: 960, y: 640 });
+      K.burst(tl, "#s19-burst", PROMPT + 0.04, { n: 24, r: 820, seed: 53 });
+      tl.fromTo("#s19-one", { y: 0 }, { y: -20, duration: 0.3, ease: "back.out(3)", immediateRender: false }, PROMPT);
+      // the comet signs it off
+      const L = K.split("#s19-end");
+      tl.fromTo(L, { opacity: 0 }, { opacity: 1, duration: 0.04, stagger: (IT - AND) / L.length }, AND);
+      K.fly(tl, "#s19-comet", { x: -200, y: 766 }, { x: 1620, y: 766 }, IT, 0.36, { ease: "power3.out", linger: 0.25 });
+      K.draw(tl, "#s19-rule", IT + 0.04, 0.34, "power3.out");
+      K.hit(tl, "[data-composition-id='s19'] .stage", PROMPT, 14);
+      window.__timelines["s19"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,35 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s05-and { font-size: 300px; left: 330px; top: 390px; }
+    #s05-no { font-size: 300px; left: 1050px; top: 390px; }
+  </style>
+  <div id="root" data-composition-id="s05" data-width="1920" data-height="1080">
+    <div class="stage">
+      <div id="s05-drift" class="drift">
+        <div id="s05-world" class="world">
+          <div id="s05-and" class="abs hero ink">AND</div>
+          <div id="s05-no" class="abs hero pink">NO,</div>
+          <div id="s05-burst" class="burst p"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s05");
+      const AND = c(4, 1) - 0.04, NO = c(4, 2) - 0.03, OUT = 0.74;
+      K.drift(tl, "#s05-drift", 0.9, { rotationY: 8, rotationX: -3 }, { rotationY: 2, rotationX: 2 });
+      tl.fromTo("#s05-and", { y: -420, scaleY: 1.9, opacity: 0, filter: "blur(16px)" }, { y: 0, scaleY: 1, opacity: 1, filter: "blur(0px)", duration: 0.22, ease: "expo.out" }, AND);
+      K.slam(tl, "#s05-no", NO, { from: 3.4, d: 0.26 });
+      gsap.set("#s05-burst", { x: 1330, y: 540 });
+      K.burst(tl, "#s05-burst", NO + 0.04, { n: 12, r: 520, seed: 11 });
+      tl.fromTo("#s05-and", { x: 0 }, { x: -26, duration: 0.25, ease: "back.out(3)", immediateRender: false }, NO);
+      // pull back: the words drop away into the distance and the next diagram is what was behind them
+      tl.to("#s05-world", { scale: 0.25, opacity: 0, filter: "blur(18px)", duration: 0.16, ease: "power3.in" }, OUT);
+      K.hit(tl, "[data-composition-id='s05'] .stage", NO, 12);
+      window.__timelines["s05"] = tl;
+    })();
+  </script>
+</template>

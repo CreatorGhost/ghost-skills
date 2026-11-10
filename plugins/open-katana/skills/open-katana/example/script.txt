@@ -1,0 +1,19 @@
+Holy shit!
+You are not ready for this.
+I made these motion graphics without even opening After Effects.
+And no, this isn't an MCP controlling After Effects.
+This is HyperFrames.
+You describe to Claude what the animation should look like.
+HyperFrames handles the rest.
+I gave it this prompt.
+Create a fifteen second cinematic animation, with kinetic type, morphing shapes, 3D elements, and fluid camera moves.
+The way the letters stretch.
+That seamless camera movement.
+And that transition?
+Hell yes!
+So your workflow goes from After Effects, layers, keyframes, graph editor, render,
+to HyperFrames. Prompt, generate, render.
+And this entire piece you just watched?
+From the first idea, to the final frame.
+One prompt.
+And that's it.

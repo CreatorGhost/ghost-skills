@@ -1,0 +1,70 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s15-title { left: 0; top: 450px; width: 1920px; text-align: center; font-size: 150px; }
+    #s15-title span { margin: 0 .1em; }
+    .s15-row { left: 560px; width: 780px; height: 92px; display: flex; align-items: center; gap: 24px; padding: 0 28px 0 0; border-radius: 10px; }
+    .s15-row u { width: 12px; height: 100%; background: var(--pink); border-radius: 6px 0 0 6px; box-shadow: 0 0 16px rgba(255, 61, 154, .6); }
+    .s15-row b { font-family: "Archivo Black", sans-serif; font-weight: 400; font-size: 44px; color: var(--ink); white-space: nowrap; flex: 1; }
+    .s15-row em { font: 700 30px "JetBrains Mono", monospace; color: var(--pink); font-style: normal; }
+    .s15-count { left: 1420px; top: 470px; width: 360px; height: 240px; }
+    .s15-count .mono { color: var(--pink); }
+    .s15-n { position: absolute; left: 0; top: 40px; font-size: 170px; opacity: 0; }
+    .s15-n5 { opacity: 1; }
+  </style>
+  <div id="root" data-composition-id="s15" data-width="1920" data-height="1080">
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s15-drift" class="drift">
+        <div id="s15-world" class="world">
+          <div id="s15-title" class="abs hero"><span id="s15-t1" class="ink">YOUR</span><span id="s15-t2" class="lime">WORKFLOW</span></div>
+          <div id="s15-cutme" class="layer">
+            <div id="s15-r1" class="s15-row panel" style="top: 780px"><u></u><span class="mono">01</span><b>AFTER EFFECTS</b><em>+2H</em></div>
+            <div id="s15-r2" class="s15-row panel" style="top: 676px"><u></u><span class="mono">02</span><b>LAYERS</b><em>+3H</em></div>
+            <div id="s15-r3" class="s15-row panel" style="top: 572px"><u></u><span class="mono">03</span><b>KEYFRAMES</b><em>+4H</em></div>
+            <div id="s15-r4" class="s15-row panel" style="top: 468px"><u></u><span class="mono">04</span><b>GRAPH EDITOR</b><em>+4H</em></div>
+            <div id="s15-r5" class="s15-row panel" style="top: 364px"><u></u><span class="mono">05</span><b>RENDER</b><em>+3H</em></div>
+            <div id="s15-count" class="s15-count abs">
+              <div class="mono">● TIME SPENT</div>
+              <div id="s15-n1" class="s15-n hero pink">2H</div><div id="s15-n2" class="s15-n hero pink">5H</div><div id="s15-n3" class="s15-n hero pink">9H</div>
+              <div id="s15-n4" class="s15-n hero pink">13H</div><div id="s15-n5" class="s15-n s15-n5 hero pink">16H</div>
+            </div>
+          </div>
+          <div id="s15-burst" class="burst"></div>
+          <div id="s15-burst2" class="burst"></div>
+        </div>
+      </div>
+      <div id="s15-slash" class="slash"></div>
+      <div id="s15-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s15"); const twin = K.dup("#s15-cutme");
+      const GOES = c(14, 4) - 0.1, T = [6, 8, 9, 10, 12].map((n) => c(14, n) - 0.06), SEAM = 5.9, CUT = 6.02;
+      K.drift(tl, "#s15-drift", SEAM, { rotationY: -7, rotationX: 3 }, { rotationY: 6, rotationX: -2 });
+      // the title arrives on the whip, then gets out of the way
+      tl.fromTo("#s15-t1", { x: -1300, scaleX: 2, opacity: 0, filter: "blur(24px)" }, { x: 0, scaleX: 1, opacity: 1, filter: "blur(0px)", duration: 0.28, ease: "expo.out" }, c(14, 2) - 0.06);
+      K.slam(tl, "#s15-t2", c(14, 3) - 0.04, { from: 2.4, d: 0.26 });
+      tl.fromTo("#s15-title", { scale: 1, y: 0 }, { scale: 0.42, y: -330, duration: 0.42, ease: "power3.inOut" }, GOES);
+      // every step of the old way drops onto the pile, and the hours add up
+      tl.fromTo("#s15-count", { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.2, ease: "power3.out" }, T[0] + 0.1);
+      T.forEach((t, i) => {
+        tl.fromTo("#s15-r" + (i + 1), { y: -760, scaleY: 1.7, opacity: 0, filter: "blur(14px)" }, { y: 0, scaleY: 1, opacity: 1, filter: "blur(0px)", duration: 0.26, ease: "back.out(1.3)" }, t);
+        for (let k = 1; k <= i; k++) { tl.to("#s15-r" + k, { y: 9, duration: 0.05, ease: "power2.out" }, t + 0.2); tl.to("#s15-r" + k, { y: 0, duration: 0.2, ease: "back.out(3)" }, t + 0.25); }
+        const n = "#s15-n" + (i + 1);
+        if (i < 4) { tl.set(n, { opacity: 1 }, t + 0.2); tl.set(n, { opacity: 0 }, T[i + 1] + 0.2); } else tl.fromTo(n, { opacity: 0 }, { opacity: 1, duration: 0.001 }, t + 0.2);
+        tl.fromTo(n, { scale: 1.5 }, { scale: 1, duration: 0.3, ease: "back.out(2.5)", immediateRender: false }, t + 0.2);
+      });
+      // the title hands over to the next shot's copy of itself; then one cut clears the pile
+      tl.set("#s15-title", { opacity: 0 }, SEAM);
+      K.fly(tl, "#s15-comet", { x: 100, y: 1164 }, { x: 1900, y: 38 }, CUT - 0.06, 0.2, { ease: "none" });
+      K.slash(tl, "#s15-slash", 1000, 600, -32, CUT - 0.04);
+      gsap.set("#s15-burst", { x: 900, y: 662 }); gsap.set("#s15-burst2", { x: 1150, y: 506 });
+      K.burst(tl, "#s15-burst", CUT, { n: 18, r: 340, seed: 41 }); K.burst(tl, "#s15-burst2", CUT + 0.05, { n: 14, r: 300, seed: 42 });
+      K.hit(tl, "[data-composition-id='s15'] .stage", CUT, 10);
+      K.cut(tl, "#s15-cutme", twin, CUT, { x: 1000, y: 600, deg: -32, d: 0.95, hang: 0.22, spin: 9, slip: 54 });
+      window.__timelines["s15"] = tl;
+    })();
+  </script>
+</template>

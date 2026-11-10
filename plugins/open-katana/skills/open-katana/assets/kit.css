@@ -1,0 +1,55 @@
+/* Shared look for every scene. Colours come from the root variables; retheme by overriding them (the -rgb pair drives the glows). */
+:root { --lime-rgb: 198, 243, 31; --pink-rgb: 255, 61, 154; }
+.stage { position: absolute; inset: 0; perspective: 1500px; perspective-origin: 50% 50%; overflow: hidden; }
+.world, .drift { position: absolute; inset: 0; transform-style: preserve-3d; }
+.abs { position: absolute; left: 0; top: 0; }
+.ctr { position: absolute; left: 50%; top: 50%; }
+
+/* hero type: chunky, extruded */
+.hero { font-family: "Archivo Black", sans-serif; font-weight: 400; line-height: 0.9; letter-spacing: -0.01em; white-space: nowrap; text-transform: uppercase; }
+.hero span { display: inline-block; }
+.ink { color: var(--ink);
+  text-shadow: .012em .014em 0 var(--ink-d), .024em .028em 0 var(--ink-d), .036em .042em 0 var(--ink-d), .048em .056em 0 var(--ink-d), .06em .07em 0 var(--ink-d), .072em .084em 0 var(--ink-dd), .084em .098em 0 var(--ink-dd); }
+.lime { color: var(--lime);
+  text-shadow: .012em .014em 0 var(--lime-d), .024em .028em 0 var(--lime-d), .036em .042em 0 var(--lime-d), .048em .056em 0 var(--lime-d), .06em .07em 0 var(--lime-d), .072em .084em 0 var(--lime-dd), .084em .098em 0 var(--lime-dd), 0 0 .28em rgba(var(--lime-rgb), .55), 0 0 .7em rgba(var(--lime-rgb), .28); }
+.pink { color: var(--pink);
+  text-shadow: .012em .014em 0 var(--pink-d), .024em .028em 0 var(--pink-d), .036em .042em 0 var(--pink-d), .048em .056em 0 var(--pink-d), .06em .07em 0 var(--pink-d), .072em .084em 0 var(--pink-d), 0 0 .3em rgba(var(--pink-rgb), .5); }
+
+/* small technical labels */
+.mono { font-family: "JetBrains Mono", monospace; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); font-size: 17px; white-space: nowrap; }
+.mono.l { color: var(--lime); }
+
+/* comet: a glowing head with a tail that points back along its travel */
+.comet { position: absolute; left: 0; top: 0; width: 0; height: 0; opacity: 0; z-index: 30; }
+.comet .tail { position: absolute; right: 0; top: -9px; width: 360px; height: 18px; border-radius: 9px; transform-origin: 100% 50%;
+  background: linear-gradient(90deg, rgba(var(--lime-rgb), 0) 0%, rgba(var(--lime-rgb), .55) 70%, #e9ff8a 100%); filter: blur(2px); }
+.comet .head { position: absolute; left: -15px; top: -15px; width: 30px; height: 30px; border-radius: 50%; background: #f1ffb0;
+  box-shadow: 0 0 0 5px rgba(var(--lime-rgb), .9), 0 0 34px 12px rgba(var(--lime-rgb), .7), 0 0 90px 30px rgba(var(--lime-rgb), .28); }
+
+/* slash: a blade of light across the frame */
+.slash { position: absolute; left: 0; top: 0; width: 3000px; height: 16px; margin: -8px 0 0 -1500px; border-radius: 8px; opacity: 0; z-index: 31;
+  background: linear-gradient(90deg, rgba(var(--lime-rgb), 0), #d9ff4a 18%, #fbffd8 50%, #d9ff4a 82%, rgba(var(--lime-rgb), 0));
+  box-shadow: 0 0 30px 8px rgba(var(--lime-rgb), .65), 0 0 110px 26px rgba(var(--lime-rgb), .3); }
+
+/* sparks */
+.burst { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 29; } /* place with x/y from the top-left of the stage */
+.burst i { position: absolute; left: -17px; top: -6px; width: 34px; height: 12px; border-radius: 50%; background: var(--lime); opacity: 0;
+  box-shadow: 0 0 12px 2px rgba(var(--lime-rgb), .65); }
+.burst.p i { background: var(--pink); box-shadow: 0 0 14px 2px rgba(var(--pink-rgb), .6); }
+
+/* outlined HUD panels */
+.panel { position: absolute; border: 3px solid var(--ink); border-radius: 14px; background: rgba(10, 18, 38, .72); box-shadow: 0 0 0 1px rgba(207, 227, 255, .12), 0 0 40px rgba(120, 170, 255, .12); }
+.panel.lm { border-color: var(--lime); box-shadow: 0 0 26px rgba(var(--lime-rgb), .35), inset 0 0 26px rgba(var(--lime-rgb), .1); }
+.hl { background: var(--lime); color: #0b1400; border-radius: 6px; padding: 0 .28em; box-shadow: 0 0 22px rgba(var(--lime-rgb), .5); }
+.line { position: absolute; height: 5px; border-radius: 3px; background: var(--lime); box-shadow: 0 0 18px 3px rgba(var(--lime-rgb), .6); transform-origin: 0 50%; }
+.line.i { background: var(--ink); box-shadow: 0 0 12px rgba(160, 200, 255, .35); height: 3px; }
+
+/* a full-stage layer whose local pixels are stage pixels (what cut() slices) */
+.layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.mask { position: absolute; overflow: hidden; }
+/* monospace copy that types on; chips keep the glyph grid (no padding) */
+.code { font-family: "JetBrains Mono", monospace; font-weight: 700; color: var(--ink); white-space: pre; position: absolute; }
+.chip { background: var(--lime); color: #0b1400; border-radius: 4px; box-shadow: 0 0 0 5px var(--lime), 0 0 26px 4px rgba(var(--lime-rgb), .45); }
+.caret { position: absolute; background: var(--lime); box-shadow: 0 0 18px 4px rgba(var(--lime-rgb), .7); border-radius: 3px; }
+.key { position: absolute; border: 3px solid var(--lime); border-radius: 12px; color: var(--lime); font-family: "JetBrains Mono", monospace; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.vline { position: absolute; width: 5px; border-radius: 3px; background: var(--lime); box-shadow: 0 0 18px 3px rgba(var(--lime-rgb), .6); }

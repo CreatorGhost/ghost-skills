@@ -1,0 +1,98 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s10-title { left: 330px; top: 212px; font-size: 112px; }
+    #s10-box { left: 330px; top: 350px; width: 1330px; height: 500px; }
+    #s10-head { position: absolute; left: 0; top: 0; width: 100%; height: 62px; border-bottom: 3px solid var(--ink); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; }
+    #s10-text { position: absolute; left: 44px; top: 108px; width: 1250px; height: 260px; font-size: 44px; }
+    #s10-a, #s10-b, #s10-c { left: 0; line-height: 64px; }
+    #s10-b { top: 84px; } #s10-c { top: 168px; }
+    #s10-caret { left: 6px; top: 6px; width: 24px; height: 52px; }
+    #s10-key { right: 30px; bottom: 28px; width: 120px; height: 70px; font-size: 34px; }
+    #s10-ruler { left: 1190px; top: 272px; width: 470px; height: 40px; }
+    #s10-ruler-line { left: 0; top: 30px; width: 470px; }
+    #s10-ruler-ticks { position: absolute; left: 0; top: 10px; width: 470px; height: 20px; background: repeating-linear-gradient(90deg, var(--dim) 0 3px, transparent 3px 31.1px); }
+    #s10-ruler-head { position: absolute; left: 0; top: 0; width: 6px; height: 40px; background: var(--lime); box-shadow: 0 0 14px 3px rgba(198, 243, 31, .7); }
+    #s10-ruler-lbl { left: 1190px; top: 236px; }
+    #s10-bar-t { left: 0; top: 118px; width: 1920px; }
+    #s10-bar-b { left: 0; top: 962px; width: 1920px; transform-origin: 100% 50%; }
+    #s10-aa { left: 50px; top: 500px; font-size: 200px; text-transform: none; }
+    #s10-shape { left: 1722px; top: 620px; width: 130px; height: 130px; border: 9px solid var(--lime); box-shadow: 0 0 22px rgba(198, 243, 31, .5), inset 0 0 22px rgba(198, 243, 31, .25); }
+    #s10-cube { left: 1727px; top: 400px; width: 120px; height: 120px; transform-style: preserve-3d; }
+    #s10-cube i { position: absolute; inset: 0; border: 5px solid var(--lime); background: rgba(198, 243, 31, .06); box-shadow: 0 0 14px rgba(198, 243, 31, .45); }
+    #s10-flood { left: 1470px; top: 690px; width: 200px; height: 200px; border-radius: 50%; background: var(--lime); z-index: 40; }
+  </style>
+  <div id="root" data-composition-id="s10" data-width="1920" data-height="1080">
+    <div class="stage">
+      <div id="s10-drift" class="drift">
+        <div id="s10-cam" class="world">
+          <div id="s10-world" class="world">
+            <div id="s10-bar-t" class="line"></div>
+            <div id="s10-bar-b" class="line"></div>
+            <div id="s10-title" class="abs hero ink">THE PROMPT:</div>
+            <div id="s10-ruler-lbl" class="abs mono l">00:15</div>
+            <div id="s10-ruler" class="abs"><div id="s10-ruler-ticks"></div><div id="s10-ruler-line" class="line i"></div><div id="s10-ruler-head"></div></div>
+            <div id="s10-box" class="panel">
+              <div id="s10-head"><span class="mono l">■ HYPERFRAMES · NEW GENERATION</span><span class="mono">↵ TO RUN</span></div>
+              <div id="s10-text">
+                <div id="s10-a" class="code">Create a <span class="chip">15-second</span> <span class="chip">cinematic</span> animation with</div>
+                <div id="s10-b" class="code"><span class="chip">kinetic type</span>, <span class="chip">morphing shapes</span>, <span class="chip">3D elements</span>, and</div>
+                <div id="s10-c" class="code"><span class="chip">fluid camera moves</span>.</div>
+                <div id="s10-caret" class="caret"></div>
+              </div>
+              <div id="s10-key" class="key">↵</div>
+            </div>
+            <div id="s10-aa" class="abs hero ink">Aa</div>
+            <div id="s10-shape" class="abs"></div>
+            <div id="s10-cube" class="abs"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div id="s10-flood" class="abs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s10"); const w = (n) => c(9, n);
+      const PROMPT = c(8, 5) - 0.04, END = 9.3;
+      K.drift(tl, "#s10-drift", END, { rotationY: -6, rotationX: 3 }, { rotationY: 5, rotationX: -2 });
+      // the box swings up out of the floor
+      tl.fromTo("#s10-world", { rotationX: 62, y: 620, z: -900, opacity: 0 }, { rotationX: 0, y: 0, z: 0, opacity: 1, duration: 0.5, ease: "expo.out" }, 0.04);
+      tl.fromTo("#s10-title", { x: -500, scaleX: 1.7, opacity: 0, filter: "blur(14px)" }, { x: 0, scaleX: 1, opacity: 1, filter: "blur(0px)", duration: 0.28, ease: "expo.out" }, PROMPT);
+      // typed word for word with the voice
+      const chars = [7, 9, 19, 29, 39, 43, 51, 57, 66, 74, 77, 87, 90, 96, 103, 109]; const keys = [[w(1) - 0.06, 0]];
+      chars.forEach((n, i) => { const s = w(i + 1), e = i < 15 ? Math.min(w(i + 2) - 0.04, s + 0.5) : s + 0.42; if (i) keys.push([s - 0.04, chars[i - 1]]); keys.push([e, n]); });
+      K.typer(tl, keys, [{ el: document.getElementById("s10-a"), len: 43 }, { el: document.getElementById("s10-b"), len: 47 }, { el: document.getElementById("s10-c"), len: 19 }], document.getElementById("s10-caret"), 26.4, 84);
+      // "15-second": a ruler and a playhead
+      tl.fromTo(["#s10-ruler", "#s10-ruler-lbl"], { opacity: 0 }, { opacity: 1, duration: 0.1 }, w(3));
+      K.draw(tl, "#s10-ruler-line", w(3), 0.3);
+      tl.fromTo("#s10-ruler-ticks", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.34, ease: "power2.out" }, w(3) + 0.04);
+      tl.fromTo("#s10-ruler-head", { x: 0 }, { x: 464, duration: END - w(3) - 0.5, ease: "none" }, w(3) + 0.1);
+      // "cinematic": letterbox lines close in
+      K.draw(tl, "#s10-bar-t", w(4), 0.4, "power3.out"); K.draw(tl, "#s10-bar-b", w(4), 0.4, "power3.out");
+      tl.to(["#s10-bar-t", "#s10-bar-b"], { opacity: 0, duration: 0.3 }, w(6));
+      // "kinetic type"
+      tl.fromTo("#s10-aa", { scaleY: 0, scaleX: 1.8, opacity: 0, transformOrigin: "50% 100%" }, { scaleY: 1, scaleX: 1, opacity: 1, duration: 0.34, ease: "back.out(2.6)" }, w(7));
+      tl.to("#s10-aa", { scaleX: 1.35, duration: 0.18, ease: "power2.inOut" }, w(8)); tl.to("#s10-aa", { scaleX: 1, duration: 0.4, ease: "elastic.out(1, 0.45)" }, w(8) + 0.18);
+      // "morphing shapes": circle, square, diamond
+      tl.fromTo("#s10-shape", { scale: 0, borderRadius: "50%", rotation: 0 }, { scale: 1, duration: 0.26, ease: "back.out(2.4)" }, w(9));
+      tl.to("#s10-shape", { borderRadius: "10%", duration: 0.3, ease: "power3.inOut" }, w(10));
+      tl.to("#s10-shape", { rotation: 135, scale: 0.84, duration: 0.5, ease: "power3.inOut" }, w(11));
+      tl.to("#s10-shape", { borderRadius: "50%", rotation: 270, scale: 1, duration: 0.5, ease: "power3.inOut" }, w(14));
+      // "3D elements": a cube that actually turns
+      const f = document.querySelectorAll("#s10-cube i"); const R = [["rotateY", 0], ["rotateY", 90], ["rotateY", 180], ["rotateY", -90], ["rotateX", 90], ["rotateX", -90]];
+      f.forEach((e, i) => { e.style.transform = `${R[i][0]}(${R[i][1]}deg) translateZ(60px)`; });
+      tl.fromTo("#s10-cube", { scale: 0, rotationX: -24, rotationY: 0 }, { scale: 1, duration: 0.26, ease: "back.out(2.4)" }, w(11));
+      tl.fromTo("#s10-cube", { rotationY: 0, rotationZ: 0 }, { rotationY: 420, rotationZ: 40, duration: END - w(11), ease: "none", immediateRender: false }, w(11));
+      // "fluid camera moves": the whole shot swings and pushes
+      tl.fromTo("#s10-cam", { rotationY: 0, rotationX: 0, x: 0, y: 0, scale: 1 }, { rotationY: 15, rotationX: 7, x: -90, y: -20, scale: 1.08, duration: 0.95, ease: "power2.inOut" }, w(14) - 0.1);
+      // enter, and the key's colour floods the frame
+      const ENT = Math.min(w(16) + 0.55, END - 0.5);
+      tl.fromTo("#s10-key", { backgroundColor: "rgba(198,243,31,0)", color: "#c6f31f" }, { backgroundColor: "#c6f31f", color: "#0b1400", duration: 0.08 }, ENT);
+      tl.fromTo("#s10-key", { scale: 1 }, { scale: 0.84, duration: 0.07, ease: "power2.in" }, ENT); tl.to("#s10-key", { scale: 1, duration: 0.2, ease: "back.out(3)" }, ENT + 0.07);
+      tl.fromTo("#s10-flood", { scale: 0 }, { scale: 34, duration: 0.26, ease: "power3.in" }, END - 0.28);
+      window.__timelines["s10"] = tl;
+    })();
+  </script>
+</template>

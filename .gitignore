@@ -7,3 +7,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# third-party reference clip: kept locally for study, not published
+plugins/open-katana/skills/open-katana/reference/*.mp4

@@ -1,0 +1,57 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s12-blur { position: absolute; inset: 0; }
+    .s12-fr { position: absolute; left: 210px; top: 130px; width: 1500px; height: 820px; border: 8px solid var(--lime); border-radius: 44px; box-shadow: 0 0 30px rgba(198, 243, 31, .5), inset 0 0 30px rgba(198, 243, 31, .25); }
+    .s12-fr.b { border-color: var(--ink); box-shadow: 0 0 24px rgba(150, 190, 255, .35); border-width: 5px; }
+    .s12-w { position: absolute; left: -400px; top: 410px; width: 2720px; text-align: center; font-size: 250px; }
+  </style>
+  <div id="root" data-composition-id="s12" data-width="1920" data-height="1080">
+    <div id="s12-blur" data-layout-allow-overflow>
+      <div class="stage">
+        <div id="s12-drift" class="drift">
+          <div id="s12-cam" class="world">
+            <div class="s12-fr" style="transform: translateZ(-500px) rotate(-6deg)"></div>
+            <div class="s12-fr b" style="transform: translateZ(-1050px) rotate(4deg)"></div>
+            <div class="s12-fr" style="transform: translateZ(-1600px) rotate(-3deg)"></div>
+            <div class="s12-fr b" style="transform: translateZ(-2150px) rotate(7deg)"></div>
+            <div class="s12-fr" style="transform: translateZ(-2700px) rotate(-5deg)"></div>
+            <div class="s12-fr b" style="transform: translateZ(-3250px) rotate(3deg)"></div>
+            <div class="s12-fr" style="transform: translateZ(-3800px) rotate(-8deg)"></div>
+            <div id="s12-w1" class="s12-w hero lime" style="transform: translateZ(-900px)">SEAMLESS</div>
+            <div id="s12-w2" class="s12-w hero ink" style="transform: translateZ(-1900px)">CAMERA</div>
+            <div id="s12-w3" class="s12-w hero ink" style="transform: translateZ(-2900px)">MOVEMENT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s12");
+      const A = c(11, 2), B = c(11, 3), C = c(11, 4), END = 2.15;
+      // one camera, flown down a tunnel of frames: it settles on each word as it is spoken and never stops
+      tl.fromTo("#s12-drift", { rotation: -12, rotationY: 12 }, { rotation: 9, rotationY: -10, duration: END, ease: "sine.inOut" }, 0);
+      tl.fromTo("#s12-cam", { z: -1500 }, { z: 850, duration: A - 0.02, ease: "power3.out" }, 0);
+      tl.to("#s12-cam", { z: 950, duration: B - A - 0.14, ease: "none" }, A - 0.02);
+      tl.to("#s12-cam", { z: 1850, duration: 0.2, ease: "power3.inOut" }, B - 0.16);
+      tl.to("#s12-cam", { z: 1940, duration: C - B - 0.2, ease: "none" }, B + 0.04);
+      tl.to("#s12-cam", { z: 2850, duration: 0.2, ease: "power3.inOut" }, C - 0.16);
+      tl.to("#s12-cam", { z: 2960, duration: END - 0.22 - C - 0.04, ease: "none" }, C + 0.04);
+      tl.to("#s12-cam", { z: 4700, duration: 0.22, ease: "power3.in" }, END - 0.22);
+      // each word clears the lens as the next comes up
+      tl.to("#s12-w1", { opacity: 0, duration: 0.1 }, B - 0.12);
+      tl.fromTo("#s12-w2", { opacity: 0 }, { opacity: 1, duration: 0.1 }, B - 0.14);
+      tl.to("#s12-w2", { opacity: 0, duration: 0.1 }, C - 0.12);
+      tl.fromTo("#s12-w3", { opacity: 0 }, { opacity: 1, duration: 0.1 }, C - 0.14);
+      // speed smear on the three flights
+      [[0.02, 0.2], [B - 0.16, 0.1], [C - 0.16, 0.1]].forEach(([t, d]) => {
+        tl.fromTo("#s12-blur", { filter: "blur(0px)" }, { filter: "blur(9px)", duration: d * 0.5, ease: "power2.in", immediateRender: false }, t);
+        tl.to("#s12-blur", { filter: "blur(0px)", duration: d, ease: "power2.out" }, t + d * 0.5);
+      });
+      tl.to("#s12-blur", { filter: "blur(12px)", duration: 0.2, ease: "power2.in" }, END - 0.22);
+      window.__timelines["s12"] = tl;
+    })();
+  </script>
+</template>

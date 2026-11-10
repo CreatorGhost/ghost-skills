@@ -1,0 +1,51 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s03-ax-x { left: 260px; top: 596px; width: 1480px; }
+    #s03-ax-y { left: 520px; top: 180px; width: 760px; transform-origin: 0 50%; }
+    #s03-ticks { left: 600px; top: 608px; width: 1100px; height: 16px; background: repeating-linear-gradient(90deg, var(--dim) 0 3px, transparent 3px 110px); opacity: .8; }
+    #s03-m1 { left: 540px; top: 300px; width: 1300px; height: 296px; }
+    #s03-m2 { left: 300px; top: 604px; width: 1700px; height: 420px; }
+    #s03-motion { font-size: 280px; left: 30px; top: 40px; }
+    #s03-graphics { font-size: 216px; left: 270px; top: 34px; }
+    #s03-lbl { left: 1500px; top: 640px; }
+  </style>
+  <div id="root" data-composition-id="s03" data-width="1920" data-height="1080">
+    <div class="stage">
+      <div id="s03-drift" class="drift">
+        <div id="s03-world" class="world">
+          <div id="s03-ax-x" class="line i"></div>
+          <div id="s03-ax-y" class="line"></div>
+          <div id="s03-ticks" class="abs"></div>
+          <div id="s03-lbl" class="abs mono">T → 00:15</div>
+          <div id="s03-m1" class="mask"><div id="s03-motion" class="abs hero ink">MOTION</div></div>
+          <div id="s03-m2" class="mask"><div id="s03-graphics" class="abs hero lime">GRAPHICS</div></div>
+        </div>
+      </div>
+      <div id="s03-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s03");
+      const MADE = 0.06, MOTION = c(3, 4) - 0.05, GRAPHICS = c(3, 5) - 0.04, OUT = 1.44;
+      K.drift(tl, "#s03-drift", 1.62, { rotationY: -5, rotationX: 3 }, { rotationY: 4, rotationX: -2 });
+      // the comet rules the two axes of a graph
+      gsap.set("#s03-ax-y", { rotation: 90 });
+      K.fly(tl, "#s03-comet", { x: 520, y: -60 }, { x: 520, y: 940 }, MADE, 0.26, { ease: "power2.out", hide: false });
+      K.draw(tl, "#s03-ax-y", MADE, 0.26, "power2.out");
+      K.fly(tl, "#s03-comet", { x: 520, y: 940 }, { x: 260, y: 598 }, MADE + 0.26, 0.14, { ease: "power2.inOut", hide: false });
+      K.fly(tl, "#s03-comet", { x: 260, y: 598 }, { x: 1740, y: 598 }, MADE + 0.4, 0.3, { ease: "power3.out", linger: 0.5 });
+      K.draw(tl, "#s03-ax-x", MADE + 0.4, 0.3);
+      tl.fromTo("#s03-ticks", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.4, ease: "power2.out" }, MADE + 0.45);
+      tl.fromTo("#s03-lbl", { opacity: 0 }, { opacity: 1, duration: 0.1 }, MADE + 0.7);
+      // the words grow out of the baseline: one up, one down
+      tl.fromTo("#s03-motion", { y: 320, scaleY: 1.5 }, { y: 0, scaleY: 1, duration: 0.3, ease: "expo.out" }, MOTION);
+      tl.fromTo("#s03-graphics", { y: -320, scaleY: 1.5 }, { y: 0, scaleY: 1, duration: 0.3, ease: "expo.out" }, GRAPHICS);
+      // whip left into the next shot
+      K.whip(tl, "#s03-world", OUT, -1500, { d: 0.18 });
+      window.__timelines["s03"] = tl;
+    })();
+  </script>
+</template>

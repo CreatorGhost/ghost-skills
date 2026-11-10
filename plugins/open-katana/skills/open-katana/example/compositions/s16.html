@@ -1,0 +1,72 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s16-title { left: 0; top: 159px; width: 1920px; text-align: center; font-size: 63px; }
+    #s16-title span { margin: 0 .1em; }
+    .s16-pill { top: 470px; width: 350px; height: 136px; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-family: "Archivo Black", sans-serif; font-size: 44px; }
+    #s16-p0 { left: 170px; }
+    #s16-p0 b { font-weight: 400; color: var(--lime); transform: skewX(-10deg); font-size: 40px; text-shadow: 0 0 20px rgba(198, 243, 31, .6); }
+    .s16-fill { position: absolute; background: var(--lime); color: #0b1400; box-shadow: 0 0 40px rgba(198, 243, 31, .55), inset 0 -8px 0 rgba(70, 100, 0, .35); transform-origin: 0 50%; }
+    #s16-p1 { left: 580px; } #s16-p2 { left: 990px; } #s16-p3 { left: 1400px; }
+    .s16-ln { top: 536px; width: 60px; }
+    #s16-l1 { left: 520px; } #s16-l2 { left: 930px; } #s16-l3 { left: 1340px; }
+    .s16-tag { position: absolute; top: 432px; }
+    #s16-secs { left: 0; top: 700px; width: 1920px; text-align: center; font-size: 150px; }
+    #s16-vs { left: 0; top: 880px; width: 1920px; text-align: center; color: var(--pink); font-size: 22px; }
+  </style>
+  <div id="root" data-composition-id="s16" data-width="1920" data-height="1080">
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s16-drift" class="drift">
+        <div id="s16-world" class="world">
+          <div id="s16-title" class="abs hero"><span class="ink">YOUR</span><span class="lime">WORKFLOW</span></div>
+          <div id="s16-t0" class="s16-tag mono l" style="left: 170px">■ ENGINE</div>
+          <div id="s16-p0" class="s16-pill panel lm"><b>HYPERFRAMES</b></div>
+          <div id="s16-l1" class="s16-ln line"></div>
+          <div id="s16-t1" class="s16-tag mono" style="left: 580px">01</div>
+          <div id="s16-p1" class="s16-pill s16-fill">PROMPT</div>
+          <div id="s16-l2" class="s16-ln line"></div>
+          <div id="s16-t2" class="s16-tag mono" style="left: 990px">02</div>
+          <div id="s16-p2" class="s16-pill s16-fill">GENERATE</div>
+          <div id="s16-l3" class="s16-ln line"></div>
+          <div id="s16-t3" class="s16-tag mono" style="left: 1400px">03</div>
+          <div id="s16-p3" class="s16-pill s16-fill">RENDER</div>
+          <div id="s16-secs" class="abs hero lime"><span id="s16-n">15</span> SECONDS</div>
+          <div id="s16-vs" class="abs mono">NOT 16 HOURS</div>
+          <div id="s16-burst" class="burst"></div>
+        </div>
+      </div>
+      <div id="s16-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s16");
+      const HF = c(15, 2) - 0.03, P = [c(15, 3), c(15, 4), c(15, 5)].map((t) => t - 0.05), OUT = 3.56;
+      K.drift(tl, "#s16-drift", 3.8, { rotationY: 6, rotationX: -2 }, { rotationY: -6, rotationX: 3 });
+      // out of the wreckage: the engine
+      K.fly(tl, "#s16-comet", { x: -200, y: 300 }, { x: 345, y: 538 }, HF - 0.2, 0.2, { ease: "power2.in" });
+      tl.fromTo(["#s16-p0", "#s16-t0"], { scale: 0.3, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "back.out(2.2)" }, HF);
+      // three steps, each one shot out of the last
+      const xs = [520, 930, 1340];
+      P.forEach((t, i) => {
+        K.fly(tl, "#s16-comet", { x: xs[i], y: 538 }, { x: xs[i] + 60, y: 538 }, t - 0.12, 0.12, { ease: "none" });
+        K.draw(tl, "#s16-l" + (i + 1), t - 0.12, 0.12, "none");
+        tl.fromTo("#s16-p" + (i + 1), { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.3, ease: "back.out(1.8)" }, t);
+        tl.fromTo("#s16-t" + (i + 1), { opacity: 0 }, { opacity: 1, duration: 0.1 }, t + 0.12);
+      });
+      gsap.set("#s16-burst", { x: 1750, y: 538 });
+      K.burst(tl, "#s16-burst", P[2] + 0.1, { n: 12, r: 380, seed: 43, from: -70, arc: 140 });
+      // and the only number that matters now
+      const n = document.getElementById("s16-n");
+      tl.fromTo("#s16-secs", { y: 80, opacity: 0, filter: "blur(12px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.24, ease: "expo.out" }, P[0] + 0.1);
+      K.track(tl, [[P[0] + 0.1, 0], [P[2] + 0.1, 15]], (v) => { const s = String(Math.round(v)).padStart(2, "0"); if (n.textContent !== s) n.textContent = s; });
+      tl.fromTo("#s16-secs", { scale: 1 }, { scale: 1.12, duration: 0.08, ease: "power2.out", immediateRender: false }, P[2] + 0.1);
+      tl.to("#s16-secs", { scale: 1, duration: 0.3, ease: "back.out(3)" }, P[2] + 0.18);
+      tl.fromTo("#s16-vs", { opacity: 0 }, { opacity: 1, duration: 0.12 }, P[2] + 0.2);
+      // the whole shot shrinks into the player of the next one
+      tl.to("#s16-world", { scale: 0.46, y: 30, opacity: 0, filter: "blur(8px)", duration: 0.22, ease: "power3.in" }, OUT);
+      window.__timelines["s16"] = tl;
+    })();
+  </script>
+</template>

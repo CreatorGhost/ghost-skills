@@ -1,0 +1,44 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s01-holy { font-size: 300px; margin: -290px 0 0 -470px; }
+    #s01-shit { font-size: 300px; margin: -10px 0 0 -470px; }
+    #s01-star { color: #f4ffc2; }
+  </style>
+  <div id="root" data-composition-id="s01" data-width="1920" data-height="1080">
+    <div class="stage">
+      <div id="s01-drift" class="drift">
+        <div id="s01-world" class="world">
+          <div id="s01-holy" class="ctr hero ink">HOLY</div>
+          <div id="s01-shit" class="ctr hero lime">SH<span id="s01-star">✱</span>T</div>
+          <div id="s01-burst" class="burst"></div>
+        </div>
+      </div>
+      <div id="s01-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s01");
+      const HOLY = c(1, 1) - 0.1, SHIT = c(1, 2) + 0.12, OUT = 1.48;
+      K.drift(tl, "#s01-drift", 1.72, { rotationY: -7, rotationX: 4 }, { rotationY: 6, rotationX: -2 });
+      // HOLY lands out of the lens
+      K.slam(tl, "#s01-holy", HOLY, { from: 3.2, d: 0.34 });
+      // the comet swings in from the right and strikes where the second word will be
+      K.fly(tl, "#s01-comet", { x: 2050, y: 330 }, { x: 1330, y: 620 }, SHIT - 0.42, 0.22, { ease: "power2.out", hide: false });
+      K.fly(tl, "#s01-comet", { x: 1330, y: 620 }, { x: 980, y: 700 }, SHIT - 0.2, 0.2, { ease: "power3.in" });
+      // SH✱T punches up from the strike with sparks; the star spins down to rest
+      tl.fromTo("#s01-shit", { scaleY: 0.2, scaleX: 1.5, y: 120, opacity: 0 }, { scaleY: 1, scaleX: 1, y: 0, opacity: 1, duration: 0.34, ease: "back.out(2.2)" }, SHIT);
+      tl.fromTo("#s01-shit", { filter: "blur(18px)" }, { filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, SHIT);
+      tl.fromTo("#s01-star", { rotation: -260, scale: 1.7 }, { rotation: 0, scale: 1, duration: 0.7, ease: "power4.out" }, SHIT);
+      gsap.set("#s01-burst", { x: 980, y: 700 });
+      K.burst(tl, "#s01-burst", SHIT, { n: 18, r: 560, seed: 3 });
+      tl.fromTo("#s01-holy", { y: 0 }, { y: -18, duration: 0.3, ease: "back.out(3)", immediateRender: false }, SHIT);
+      // the camera drives straight through both words
+      K.through(tl, "#s01-world", OUT, { to: 4.2, d: 0.24 });
+      K.hit(tl, "[data-composition-id='s01'] .stage", SHIT, 12);
+      window.__timelines["s01"] = tl;
+    })();
+  </script>
+</template>

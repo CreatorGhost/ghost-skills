@@ -1,0 +1,52 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s07-this { left: 0; top: 318px; width: 1920px; text-align: center; font-size: 30px; letter-spacing: .5em; color: var(--ink); }
+    #s07-rule { left: 760px; top: 376px; width: 400px; }
+    #s07-mask { position: absolute; left: 0; top: 300px; width: 1920px; height: 500px; }
+    #s07-name { left: 0; top: 140px; width: 1920px; text-align: center; font-size: 196px; }
+    #s07-skew { position: absolute; inset: 0; }
+    #s07-sub { left: 0; top: 720px; width: 1920px; text-align: center; font-family: "Inter", sans-serif; font-weight: 700; font-size: 46px; color: var(--ink); }
+    #s07-sub b { color: var(--pink); font-weight: 700; margin-right: .2em; }
+  </style>
+  <div id="root" data-composition-id="s07" data-width="1920" data-height="1080">
+    <div class="stage">
+      <div id="s07-drift" class="drift">
+        <div id="s07-world" class="world">
+          <div id="s07-this" class="abs mono">THIS IS</div>
+          <div id="s07-rule" class="line"></div>
+          <div id="s07-mask"><div id="s07-skew"><div id="s07-name" class="abs hero lime">HYPERFRAMES</div></div></div>
+          <div id="s07-sub" class="abs"><b>✱</b>Claude Code</div>
+          <div id="s07-burst" class="burst"></div>
+        </div>
+      </div>
+      <div id="s07-slash" class="slash"></div>
+      <div id="s07-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s07");
+      const THIS = c(5, 1) - 0.04, NAME = c(5, 3) - 0.02, OUT = 2.02;
+      K.drift(tl, "#s07-drift", 2.25, { rotationY: 7, rotationX: 4 }, { rotationY: -7, rotationX: -2 });
+      const L = K.split("#s07-this");
+      tl.fromTo(L, { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.1, stagger: 0.03 }, THIS);
+      K.fly(tl, "#s07-comet", { x: 760, y: 378 }, { x: 1160, y: 378 }, THIS + 0.12, 0.26, { ease: "power2.inOut", hide: false });
+      K.draw(tl, "#s07-rule", THIS + 0.12, 0.26, "power2.inOut");
+      // the blade crosses the frame and the name is what it leaves behind
+      K.fly(tl, "#s07-comet", { x: 1160, y: 378 }, { x: -200, y: 880 }, NAME - 0.2, 0.14, { ease: "power2.in" });
+      K.fly(tl, "#s07-comet", { x: -200, y: 880 }, { x: 2150, y: 250 }, NAME - 0.05, 0.16, { ease: "none" });
+      K.slash(tl, "#s07-slash", 960, 560, -15, NAME);
+      gsap.set("#s07-skew", { skewX: -12 });
+      tl.fromTo("#s07-mask", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.2, ease: "power2.out" }, NAME - 0.02);
+      tl.fromTo("#s07-name", { x: -160, scaleX: 1.25, filter: "blur(14px)" }, { x: 0, scaleX: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out" }, NAME - 0.02);
+      gsap.set("#s07-burst", { x: 960, y: 620 });
+      K.burst(tl, "#s07-burst", NAME + 0.06, { n: 20, r: 620, seed: 21, from: 20, arc: 140 });
+      tl.fromTo("#s07-sub", { opacity: 0, y: 24, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.2, ease: "power3.out" }, NAME + 0.3);
+      K.through(tl, "#s07-world", OUT, { to: 3.6, d: 0.22 });
+      K.hit(tl, "[data-composition-id='s07'] .stage", NAME, 12);
+      window.__timelines["s07"] = tl;
+    })();
+  </script>
+</template>

@@ -38,6 +38,7 @@ Add the marketplace once and install any skill with a single command, or copy a 
 | [**math-explainer-video**](plugins/math-explainer-video) | Builds intuition-first math explainer videos with Manim, including scripts, synced English or Hinglish narration, pre-render QA, frame critique, 4K output, music, chapters, and thumbnails. |
 | [**ai-video-dubbing**](plugins/ai-video-dubbing) | Builds and debugs translated video dubbing and recap pipelines, with subtitle-timed translation, timestamp-anchored TTS, sync diagnostics, and checks against the final rendered video. |
 | [**unslop**](plugins/unslop) | Edits prose to remove AI writing habits while preserving meaning, tone, rhythm, and a distinct human voice. |
+| [**open-katana**](plugins/open-katana) | Builds Katana-style kinetic motion graphics from a script with HyperFrames: word-synced narration, hero type, blade slices, a 3D camera tunnel, sound, and a slow-motion review of the render. |
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to add another skill.
 
@@ -63,8 +64,9 @@ Then install any skill:
 | `math-explainer-video` | `/plugin install math-explainer-video@ghost-skills` |
 | `ai-video-dubbing` | `/plugin install ai-video-dubbing@ghost-skills` |
 | `unslop` | `/plugin install unslop@ghost-skills` |
+| `open-katana` | `/plugin install open-katana@ghost-skills` |
 
-To install all six, run every install command in the table after adding the marketplace. From a local clone, use `/plugin marketplace add /path/to/ghost-skills` instead.
+To install all seven, run every install command in the table after adding the marketplace. From a local clone, use `/plugin marketplace add /path/to/ghost-skills` instead.
 
 ### 2. npx for multiple AI agents
 
@@ -115,6 +117,7 @@ Invoke a skill directly, or describe the job in plain language. Claude can load 
 /math-explainer-video
 /ai-video-dubbing
 /unslop
+/open-katana
 
 Audit the UI/UX of this app
 Review this agentic backend before I ship it
@@ -122,6 +125,7 @@ Write regression tests that prove this bug is fixed
 Make a Manim explainer about the Fourier transform
 Fix the voiceover drift in this translated video
 Make this draft sound like a person wrote it
+Make a Katana-style motion graphic from this script
 ```
 
 Each plugin README documents its workflow, requirements, and output.
@@ -146,6 +150,7 @@ ghost-skills/
 │   ├── test-case-author/
 │   ├── math-explainer-video/
 │   ├── ai-video-dubbing/
+│   ├── open-katana/
 │   └── unslop/
 │       ├── .claude-plugin/plugin.json
 │       ├── README.md
