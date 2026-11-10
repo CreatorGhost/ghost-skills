@@ -1,0 +1,112 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[{"id":"lime","type":"color","label":"Accent","default":"#c6f31f"},{"id":"ink","type":"color","label":"Type","default":"#cfe3ff"},{"id":"pink","type":"color","label":"Second accent","default":"#ff3d9a"}]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="assets/kit.css" />
+    <script src="assets/timing.js"></script>
+    <script src="assets/grid.js"></script>
+    <script src="assets/kit.js"></script>
+    <style>
+      :root {
+        --ground: #070c1a;
+        --ink: #cfe3ff;
+        --ink-d: #5d7fb4;
+        --ink-dd: #2f4a78;
+        --lime: #c6f31f;
+        --lime-d: #6f8f00;
+        --lime-dd: #3f5400;
+        --pink: #ff3d9a;
+        --pink-d: #8c1250;
+        --dim: #7f93b8;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+      #bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, #0f1a36 0%, #0a1126 45%, #060a16 100%); overflow: hidden; }
+      #bg-stars { position: absolute; left: -120px; top: -120px; width: 2160px; height: 1320px; }
+      #bg-stars i { position: absolute; border-radius: 50%; background: #cfe3ff; }
+      #bg-grid { position: absolute; left: -120px; top: -120px; width: 2160px; height: 1320px; opacity: .5;
+        background-image: radial-gradient(rgba(140, 170, 220, .35) 1.6px, transparent 2px); background-size: 60px 60px; }
+      #bg-vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(2, 4, 10, .7) 100%); }
+      #hud { position: absolute; inset: 0; }
+      #hud-tl { position: absolute; left: 96px; top: 84px; padding: 10px 0 0 12px; border-left: 3px solid var(--dim); border-top: 3px solid var(--dim); }
+      #hud-br { position: absolute; right: 96px; bottom: 76px; }
+      #hud-bl { position: absolute; left: 96px; bottom: 76px; }
+      #hud-tr { position: absolute; right: 150px; top: 84px; }
+      #hud-ring { position: absolute; right: 250px; top: 60px; width: 200px; height: 200px; }
+      #hud-ring i { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%; background: #9db4dc; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="54.2" data-width="1920" data-height="1080">
+      <div id="bg">
+        <div id="bg-grid"></div>
+        <div id="bg-stars"></div>
+        <div id="bg-vig"></div>
+      </div>
+      <div id="hud" class="clip" data-start="0" data-duration="54.2" data-track-index="0" style="z-index: 1">
+        <div id="hud-tl" class="mono" data-layout-ignore>FRAME <span id="hud-frame">0000</span></div>
+        <div id="hud-tr" class="mono" data-layout-ignore>COMP / MAIN</div>
+        <div id="hud-ring"></div>
+        <div id="hud-bl" class="mono" data-layout-ignore>HF.01</div>
+        <div id="hud-br" class="mono" data-layout-ignore>1920×1080 · 30</div>
+      </div>
+      <div id="s01" data-composition-id="s01" data-composition-src="compositions/s01.html" data-start="0" data-duration="1.72" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s02" data-composition-id="s02" data-composition-src="compositions/s02.html" data-start="1.72" data-duration="2.06" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s03" data-composition-id="s03" data-composition-src="compositions/s03.html" data-start="3.78" data-duration="1.62" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s04" data-composition-id="s04" data-composition-src="compositions/s04.html" data-start="5.4" data-duration="2.55" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 3"></div>
+      <div id="s05" data-composition-id="s05" data-composition-src="compositions/s05.html" data-start="7.5" data-duration="0.9" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s06" data-composition-id="s06" data-composition-src="compositions/s06.html" data-start="8.4" data-duration="3.1" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s07" data-composition-id="s07" data-composition-src="compositions/s07.html" data-start="11.5" data-duration="2.25" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s08" data-composition-id="s08" data-composition-src="compositions/s08.html" data-start="13.75" data-duration="3.4" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s09" data-composition-id="s09" data-composition-src="compositions/s09.html" data-start="17.15" data-duration="2.3" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s10" data-composition-id="s10" data-composition-src="compositions/s10.html" data-start="19.45" data-duration="9.3" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s11" data-composition-id="s11" data-composition-src="compositions/s11.html" data-start="28.75" data-duration="1.85" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s12" data-composition-id="s12" data-composition-src="compositions/s12.html" data-start="30.6" data-duration="2.15" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s13" data-composition-id="s13" data-composition-src="compositions/s13.html" data-start="32.75" data-duration="1.65" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 3"></div>
+      <div id="s14" data-composition-id="s14" data-composition-src="compositions/s14.html" data-start="34.1" data-duration="1.3" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s15" data-composition-id="s15" data-composition-src="compositions/s15.html" data-start="35.4" data-duration="7.0" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 3"></div>
+      <div id="s16" data-composition-id="s16" data-composition-src="compositions/s16.html" data-start="41.3" data-duration="3.8" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s17" data-composition-id="s17" data-composition-src="compositions/s17.html" data-start="45.1" data-duration="2.4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s18" data-composition-id="s18" data-composition-src="compositions/s18.html" data-start="47.5" data-duration="2.55" data-track-index="2" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="s19" data-composition-id="s19" data-composition-src="compositions/s19.html" data-start="50.05" data-duration="4.15" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index: 2"></div>
+      <div id="cap" data-composition-id="cap" data-composition-src="compositions/cap.html" data-start="0" data-duration="54.2" data-track-index="3" data-track-kind="captions" data-width="1920" data-height="1080" style="z-index: 3"></div>
+      <audio id="vo" class="clip" src="assets/vo.wav" data-start="0" data-duration="52.56" data-track-index="4" data-volume="1"></audio>
+      <audio id="music" class="clip" src="assets/music.wav" data-start="0" data-duration="54.2" data-track-index="6" data-volume="0.16"></audio>
+      <audio id="sfx" class="clip" src="assets/sfx.wav" data-start="0" data-duration="52.4" data-track-index="5" data-volume="0.8"></audio>
+
+    </div>
+    <script>
+      (() => {
+        const tl = gsap.timeline({ paused: true });
+        const D = 54.2;
+        // stars and the dotted ring are decoration: placed by index, never by chance
+        const stars = document.getElementById("bg-stars");
+        for (let i = 0; i < 110; i++) {
+          const s = document.createElement("i"); const r = 1.5 + K.rnd(i, 2) * 3;
+          s.style.cssText = `left:${K.rnd(i, 5) * 2160}px;top:${K.rnd(i, 9) * 1320}px;width:${r}px;height:${r}px;opacity:${0.25 + K.rnd(i, 4) * 0.6}`;
+          stars.appendChild(s);
+        }
+        const ring = document.getElementById("hud-ring");
+        for (let i = 0; i < 64; i++) {
+          const d = document.createElement("i"); const a = (i / 64) * Math.PI * 2; const R = i % 2 ? 92 : 74;
+          d.style.transform = `translate(${Math.cos(a) * R}px, ${Math.sin(a) * R}px)`; d.style.opacity = 0.25 + K.rnd(i, 6) * 0.6;
+          ring.appendChild(d);
+        }
+        // the world behind drifts for the whole film; the frame counter reads the playhead
+        tl.fromTo("#bg-stars", { x: 60, y: 30 }, { x: -60, y: -30, duration: D, ease: "none" }, 0);
+        tl.fromTo("#bg-grid", { x: 30, y: 12 }, { x: -30, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo("#hud-ring", { rotation: 0 }, { rotation: 150, duration: D, ease: "none" }, 0);
+        const f = { n: 0 }; const fe = document.getElementById("hud-frame");
+        tl.fromTo(f, { n: 0 }, { n: D * 30, duration: D, ease: "none", onUpdate: () => { fe.textContent = String(Math.round(f.n)).padStart(4, "0"); } }, 0);
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>

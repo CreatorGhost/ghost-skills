@@ -1,0 +1,69 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    .s06-box { top: 450px; width: 420px; height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+    .s06-box b { font-family: "Archivo Black", sans-serif; font-weight: 400; font-size: 40px; color: var(--ink); letter-spacing: .01em; white-space: nowrap; }
+    .s06-tag { position: absolute; top: 412px; }
+    .s06-b1 { left: 230px; } .s06-b2 { left: 750px; } .s06-b3 { left: 1270px; }
+    .s06-ln { top: 538px; width: 50px; }
+    .s06-x { left: 750px; top: 450px; width: 420px; height: 180px; display: flex; align-items: center; justify-content: center; font: 700 190px/1 "JetBrains Mono", monospace; color: var(--pink); text-shadow: 0 0 30px rgba(255, 61, 154, .7); }
+    #s06-nope { left: 1090px; top: 250px; font-size: 130px; padding: 14px 34px 8px; border: 9px solid var(--pink); border-radius: 14px; background: rgba(255, 61, 154, .14); box-shadow: 0 0 40px rgba(255, 61, 154, .45); }
+  </style>
+  <div id="root" data-composition-id="s06" data-width="1920" data-height="1080">
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s06-drift" class="drift">
+        <div id="s06-world" class="world">
+          <div id="s06-gl" class="layer">
+            <div class="s06-tag s06-b1 mono">■ MODEL</div>
+            <div id="s06-b1" class="s06-box s06-b1 panel"><b>CLAUDE</b><span class="mono">THE MODEL</span></div>
+            <div id="s06-l1a" class="s06-ln line i" style="left: 650px"></div><div id="s06-l1b" class="s06-ln line i" style="left: 700px"></div>
+            <div id="s06-t2" class="s06-tag s06-b2 mono">■ BRIDGE</div>
+            <div id="s06-b2" class="s06-box s06-b2 panel"><b>MCP SERVER</b><span class="mono">THE BRIDGE</span></div>
+            <div id="s06-l2a" class="s06-ln line i" style="left: 1170px"></div><div id="s06-l2b" class="s06-ln line i" style="left: 1220px"></div>
+            <div id="s06-t3" class="s06-tag s06-b3 mono">■ APP</div>
+            <div id="s06-b3" class="s06-box s06-b3 panel"><b>AFTER EFFECTS</b><span class="mono">THE EDITOR</span></div>
+            <div id="s06-x" class="s06-x abs">✕</div>
+          </div>
+          <div id="s06-nope" class="abs hero pink">NOPE</div>
+          <div id="s06-burst" class="burst"></div>
+          <div id="s06-burst2" class="burst"></div>
+        </div>
+      </div>
+      <div id="s06-slash" class="slash"></div>
+      <div id="s06-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s06"); const strips = K.bands("#s06-gl", 7);
+      const MCP = c(4, 6) - 0.02, AE = c(4, 8) - 0.04, CUT = c(4, 9) + 0.3, GL = 2.76;
+      const pop = (sel, t) => tl.fromTo(sel, { scale: 0.5, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.26, ease: "back.out(2)" }, t);
+      K.drift(tl, "#s06-drift", 3.1, { rotationY: -9, rotationX: 4 }, { rotationY: 9, rotationX: -3 });
+      // revealed by the pull-back
+      tl.fromTo("#s06-world", { scale: 2.4, opacity: 0, filter: "blur(20px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out" }, 0);
+      // the comet wires the chain together, one hop per word
+      K.fly(tl, "#s06-comet", { x: 650, y: 540 }, { x: 750, y: 540 }, MCP - 0.2, 0.2, { ease: "none", linger: 0.2 });
+      K.draw(tl, "#s06-l1a", MCP - 0.2, 0.1, "none"); K.draw(tl, "#s06-l1b", MCP - 0.1, 0.1, "none");
+      pop("#s06-b2", MCP); tl.fromTo("#s06-t2", { opacity: 0 }, { opacity: 1, duration: 0.1 }, MCP + 0.1);
+      K.fly(tl, "#s06-comet", { x: 1170, y: 540 }, { x: 1270, y: 540 }, AE - 0.2, 0.2, { ease: "none", linger: 0.25 });
+      K.draw(tl, "#s06-l2a", AE - 0.2, 0.1, "none"); K.draw(tl, "#s06-l2b", AE - 0.1, 0.1, "none");
+      pop("#s06-b3", AE); tl.fromTo("#s06-t3", { opacity: 0 }, { opacity: 1, duration: 0.1 }, AE + 0.1);
+      // the blade comes down through the bridge: both links snap and sag, the bridge is crossed out
+      K.fly(tl, "#s06-comet", { x: 1560, y: -420 }, { x: 360, y: 1500 }, CUT - 0.07, 0.2, { ease: "none" });
+      K.slash(tl, "#s06-slash", 960, 540, -58, CUT - 0.04, { rev: true, hold: 0.45, fade: 0.4 });
+      K.hit(tl, "[data-composition-id='s06'] .stage", CUT, 10);
+      gsap.set("#s06-burst", { x: 700, y: 540 }); gsap.set("#s06-burst2", { x: 1220, y: 540 });
+      K.burst(tl, "#s06-burst", CUT + 0.02, { n: 18, r: 300, seed: 13 }); K.burst(tl, "#s06-burst2", CUT + 0.08, { n: 18, r: 300, seed: 14 });
+      [["#s06-l1a", 26, "0% 50%"], ["#s06-l1b", -26, "100% 50%"], ["#s06-l2a", 26, "0% 50%"], ["#s06-l2b", -26, "100% 50%"]].forEach(([s, r, o]) => {
+        tl.set(s, { transformOrigin: o }, CUT); tl.to(s, { rotation: r, duration: 0.5, ease: "elastic.out(1, 0.45)" }, CUT + 0.02);
+      });
+      tl.fromTo("#s06-x", { scale: 2.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "back.out(2.2)" }, CUT + 0.12);
+      tl.fromTo("#s06-nope", { scale: 3, rotation: -26, opacity: 0, filter: "blur(16px)" }, { scale: 1, rotation: -8, opacity: 1, filter: "blur(0px)", duration: 0.24, ease: "expo.out" }, CUT + 0.26);
+      // and the whole idea glitches out
+      K.glitch(tl, "#s06-gl", strips, GL, 0.32);
+      tl.to("#s06-nope", { scaleX: 2.2, scaleY: 0.1, opacity: 0, duration: 0.2, ease: "power3.in" }, GL + 0.06);
+      window.__timelines["s06"] = tl;
+    })();
+  </script>
+</template>

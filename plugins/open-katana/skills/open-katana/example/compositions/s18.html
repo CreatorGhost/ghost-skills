@@ -1,0 +1,74 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s18-svg { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+    #s18-path { fill: none; stroke: var(--ink); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    #s18-dot { left: 300px; top: 770px; width: 60px; height: 60px; border: 5px solid var(--ink); border-radius: 50%; }
+    #s18-core { left: 315px; top: 785px; width: 30px; height: 30px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 30px 10px rgba(198, 243, 31, .6); }
+    #s18-l1 { left: 268px; top: 850px; }
+    #s18-base { left: 330px; top: 900px; width: 1330px; }
+    #s18-ticks { left: 330px; top: 910px; width: 1330px; height: 14px; background: repeating-linear-gradient(90deg, var(--dim) 0 3px, transparent 3px 95px); }
+    #s18-t0 { left: 330px; top: 934px; } #s18-t1 { left: 1590px; top: 934px; }
+    #s18-box { left: 1300px; top: 540px; width: 360px; height: 230px; }
+    #s18-q { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: 700 80px "JetBrains Mono", monospace; color: var(--dim); }
+    #s18-b1 { left: 50px; top: 80px; width: 260px; height: 14px; border-radius: 7px; }
+    #s18-b2 { left: 50px; top: 132px; width: 260px; height: 14px; border-radius: 7px; }
+    #s18-l2 { left: 1300px; top: 500px; }
+  </style>
+  <div id="root" data-composition-id="s18" data-width="1920" data-height="1080">
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s18-drift" class="drift">
+        <div id="s18-world" class="world">
+          <svg id="s18-svg" viewBox="0 0 1920 1080"><path id="s18-path" pathLength="1" d="M330 800 Q 760 -60 1300 655" /></svg>
+          <div id="s18-base" class="line i"></div>
+          <div id="s18-ticks" class="abs"></div>
+          <div id="s18-t0" class="abs mono">00:00</div>
+          <div id="s18-t1" class="abs mono">00:54</div>
+          <div id="s18-dot" class="abs"></div>
+          <div id="s18-core" class="abs"></div>
+          <div id="s18-l1" class="abs mono l">■ FIRST IDEA</div>
+          <div id="s18-l2" class="abs mono">■ FINAL FRAME</div>
+          <div id="s18-box" class="panel"><div id="s18-q">?</div><div id="s18-b1" class="line"></div><div id="s18-b2" class="line"></div></div>
+          <div id="s18-burst" class="burst"></div>
+          <div id="s18-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s18");
+      const FIRST = c(17, 3) - 0.04, GO = c(17, 4) + 0.1, LAND = c(17, 8) + 0.02, OUT = 2.34;
+      K.drift(tl, "#s18-drift", 2.55, { rotationY: 8, rotationX: 3 }, { rotationY: -7, rotationX: -2 });
+      // the point the player folded into
+      tl.fromTo(["#s18-core", "#s18-dot"], { scale: 0 }, { scale: 1, duration: 0.3, ease: "back.out(3)", stagger: 0.06 }, 0);
+      tl.fromTo("#s18-core", { scale: 1 }, { scale: 1.7, duration: 0.1, ease: "power2.out", immediateRender: false }, FIRST); tl.to("#s18-core", { scale: 1, duration: 0.3, ease: "back.out(3)" }, FIRST + 0.1);
+      tl.fromTo("#s18-l1", { opacity: 0 }, { opacity: 1, duration: 0.1 }, FIRST);
+      K.draw(tl, "#s18-base", 0.1, 0.5); tl.fromTo("#s18-ticks", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "power2.out" }, 0.14);
+      tl.fromTo(["#s18-t0", "#s18-t1"], { opacity: 0 }, { opacity: 1, duration: 0.1, stagger: 0.3 }, 0.2);
+      tl.fromTo(["#s18-box", "#s18-l2"], { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.26, ease: "back.out(2)" }, 0.34);
+      // one arc from the idea to the last frame; the comet's head is always the end of the line
+      const P0 = [330, 800], P1 = [760, -60], P2 = [1300, 655]; const B = (u, k) => (1 - u) * (1 - u) * P0[k] + 2 * (1 - u) * u * P1[k] + u * u * P2[k];
+      const len = [0]; for (let i = 1; i <= 100; i++) len.push(len[i - 1] + Math.hypot(B(i / 100, 0) - B((i - 1) / 100, 0), B(i / 100, 1) - B((i - 1) / 100, 1)));
+      const path = document.getElementById("s18-path"), comet = document.getElementById("s18-comet"), tail = comet.querySelector(".tail"), ease = gsap.parseEase("power2.inOut");
+      tail.style.transform = "scaleX(0.7)";
+      K.track(tl, [[GO, 0], [LAND, 1]], (v) => {
+        const u = ease(v), x = B(u, 0), y = B(u, 1), a = Math.atan2(B(u + 0.01, 1) - y, B(u + 0.01, 0) - x) * 57.2958;
+        const i = Math.min(99, Math.floor(u * 100)), f = (len[i] + (len[i + 1] - len[i]) * (u * 100 - i)) / len[100];
+        path.style.strokeDashoffset = 1 - f; comet.style.transform = `translate(${x}px, ${y}px) rotate(${a}deg)`;
+      });
+      tl.set(comet, { opacity: 1 }, GO); tl.set(comet, { opacity: 0 }, LAND);
+      // it lands, and the frame is filled in
+      gsap.set("#s18-burst", { x: 1300, y: 655 });
+      K.burst(tl, "#s18-burst", LAND, { n: 16, r: 420, seed: 47 });
+      tl.to("#s18-q", { opacity: 0, duration: 0.06 }, LAND);
+      tl.fromTo("#s18-box", { borderColor: "#cfe3ff" }, { borderColor: "#c6f31f", duration: 0.08, immediateRender: false }, LAND);
+      tl.fromTo("#s18-box", { scale: 1 }, { scale: 1.12, duration: 0.08, ease: "power2.out", immediateRender: false }, LAND); tl.to("#s18-box", { scale: 1, duration: 0.3, ease: "back.out(3)" }, LAND + 0.08);
+      K.draw(tl, "#s18-b1", LAND + 0.04, 0.2); K.draw(tl, "#s18-b2", LAND + 0.12, 0.2);
+      // push in through the final frame
+      tl.fromTo("#s18-world", { scale: 1, transformOrigin: "1480px 655px" }, { scale: 7, opacity: 0, filter: "blur(14px)", duration: 0.2, ease: "power3.in", immediateRender: false }, OUT);
+      window.__timelines["s18"] = tl;
+    })();
+  </script>
+</template>

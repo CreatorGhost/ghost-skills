@@ -1,0 +1,67 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    .s04-win { left: 410px; top: 236px; width: 1100px; height: 620px; overflow: hidden; }
+    .s04-bar { position: absolute; left: 0; top: 0; width: 100%; height: 58px; border-bottom: 3px solid var(--ink); display: flex; align-items: center; gap: 12px; padding-left: 24px; }
+    .s04-bar b { width: 14px; height: 14px; border-radius: 50%; background: var(--ink); opacity: .7; }
+    .s04-bar span { margin-left: 14px; color: var(--ink); font-size: 17px; }
+    .s04-bar em { font-style: normal; color: var(--pink); margin-left: 6px; }
+    .s04-ruler { position: absolute; left: 330px; top: 70px; width: 740px; height: 18px; background: repeating-linear-gradient(90deg, var(--dim) 0 2px, transparent 2px 74px); }
+    .s04-row { position: absolute; left: 0; width: 100%; height: 56px; }
+    .s04-row .mono { position: absolute; left: 40px; top: 18px; color: var(--ink); font-size: 16px; }
+    .s04-row i { position: absolute; top: 20px; height: 16px; border-radius: 4px; background: var(--ink); opacity: .82; transform-origin: 0 50%; }
+    .s04-head { position: absolute; left: 640px; top: 62px; width: 5px; height: 500px; background: var(--lime); box-shadow: 0 0 16px 3px rgba(198, 243, 31, .7); }
+    .s04-foot { position: absolute; left: 30px; bottom: 16px; font-size: 15px; }
+    .s04-load { position: absolute; right: 30px; bottom: 16px; width: 120px; height: 16px; border: 3px solid var(--ink); border-radius: 5px; }
+  </style>
+  <div id="root" data-composition-id="s04" data-width="1920" data-height="1080">
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s04-drift" class="drift">
+        <div id="s04-world" class="world">
+          <div id="s04-cutme" class="layer">
+            <div class="s04-win panel">
+              <div class="s04-bar"><b></b><b></b><b></b><span class="mono">AFTER EFFECTS — UNTITLED PROJECT.AEP</span><em id="s04-nr" class="mono s04-nr">[NOT RESPONDING]</em></div>
+              <div class="s04-ruler"></div>
+              <div class="s04-row" style="top: 96px"><div class="mono">▸ TEXT — TITLE</div><i class="s04-b" style="left: 420px; width: 560px"></i></div>
+              <div class="s04-row" style="top: 152px"><div class="mono">▸ SHAPE LAYER 14</div><i class="s04-b" style="left: 380px; width: 330px"></i></div>
+              <div class="s04-row" style="top: 208px"><div class="mono">▸ NULL 7</div><i class="s04-b" style="left: 372px; width: 250px"></i></div>
+              <div class="s04-row" style="top: 264px"><div class="mono">▸ ADJUSTMENT LAYER 3</div><i class="s04-b" style="left: 350px; width: 300px"></i></div>
+              <div class="s04-row" style="top: 320px"><div class="mono">▸ CAMERA 1</div><i class="s04-b" style="left: 400px; width: 610px"></i></div>
+              <div class="s04-row" style="top: 376px"><div class="mono">▸ LIGHT 2</div><i class="s04-b" style="left: 410px; width: 520px"></i></div>
+              <div class="s04-row" style="top: 432px"><div class="mono">▸ PRE-COMP 9</div><i class="s04-b" style="left: 340px; width: 190px"></i></div>
+              <div class="s04-row" style="top: 488px"><div class="mono">▸ BG SOLID</div><i class="s04-b" style="left: 330px; width: 700px"></i></div>
+              <div id="s04-head" class="s04-head"></div>
+              <div class="s04-foot mono">◌ LOADING PLUG-INS… EST. 4 MIN</div>
+              <div class="s04-load"></div>
+            </div>
+          </div>
+          <div id="s04-burst" class="burst"></div>
+          <div id="s04-burst2" class="burst"></div>
+        </div>
+      </div>
+      <div id="s04-slash" class="slash"></div>
+      <div id="s04-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s04"); const twin = K.dup("#s04-cutme");
+      const CUT = c(3, 10) + 0.04;
+      K.drift(tl, "#s04-drift", 2.1, { rotationY: -16, rotationX: 7 }, { rotationY: 9, rotationX: 1 });
+      // the editor whips in on the same move that took the last shot away
+      tl.fromTo("#s04-world", { x: 1700, scaleX: 1.8, opacity: 0, filter: "blur(30px)" }, { x: 0, scaleX: 1, opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "expo.out" }, 0);
+      tl.fromTo("#s04-cutme .s04-b", { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: "power3.out", stagger: 0.045 }, 0.14);
+      tl.fromTo("#s04-head", { x: -300 }, { x: 0, duration: CUT - 0.1, ease: "none" }, 0.1);
+      // the cut: bottom-left to top-right, and the whole editor comes apart
+      tl.fromTo("#s04-nr", { opacity: 0 }, { opacity: 1, duration: 0.06, repeat: 3, yoyo: true, ease: "none" }, 0.7);
+      K.fly(tl, "#s04-comet", { x: 60, y: 1110 }, { x: 1900, y: -40 }, CUT - 0.06, 0.2, { ease: "none" });
+      K.slash(tl, "#s04-slash", 960, 546, -32, CUT - 0.04);
+      gsap.set("#s04-burst", { x: 750, y: 677 }); gsap.set("#s04-burst2", { x: 1170, y: 415 });
+      K.burst(tl, "#s04-burst", CUT, { n: 18, r: 330, seed: 9 }); K.burst(tl, "#s04-burst2", CUT + 0.05, { n: 14, r: 300, seed: 10 });
+      K.hit(tl, "[data-composition-id='s04'] .stage", CUT, 10);
+      K.cut(tl, "#s04-cutme", twin, CUT, { x: 960, y: 546, deg: -32, d: 0.95, hang: 0.22, spin: 9 });
+      window.__timelines["s04"] = tl;
+    })();
+  </script>
+</template>

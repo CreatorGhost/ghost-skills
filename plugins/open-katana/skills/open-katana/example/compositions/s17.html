@@ -1,0 +1,58 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s17-win { left: 440px; top: 236px; width: 1040px; height: 640px; overflow: hidden; }
+    #s17-head { position: absolute; left: 0; top: 0; width: 100%; height: 56px; border-bottom: 3px solid var(--ink); display: flex; align-items: center; justify-content: space-between; padding: 0 26px; }
+    #s17-view { position: absolute; left: 0; top: 59px; width: 100%; height: 510px; overflow: hidden; }
+    .s17-m { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 150px; opacity: 0; }
+    .s17-m.g { background: var(--lime); }
+    .s17-m.g div { color: #0b1400; }
+    #s17-bar { position: absolute; left: 26px; bottom: 26px; width: 860px; height: 10px; border-radius: 5px; background: rgba(160, 190, 240, .25); }
+    #s17-fill { position: absolute; inset: 0; border-radius: 5px; background: var(--lime); box-shadow: 0 0 14px rgba(198, 243, 31, .7); transform-origin: 0 50%; }
+    #s17-tc { position: absolute; right: 26px; bottom: 20px; color: var(--ink); }
+  </style>
+  <div id="root" data-composition-id="s17" data-width="1920" data-height="1080">
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s17-drift" class="drift">
+        <div id="s17-world" class="world">
+          <div id="s17-win" class="panel">
+            <div id="s17-head"><span class="mono l">▶ PLAYBACK</span><span class="mono">MAIN.MP4 · 8×</span></div>
+            <div id="s17-view">
+              <div id="s17-m1" class="s17-m"><div class="hero ink">HOLY</div><div class="hero lime">SH✱T</div></div>
+              <div id="s17-m2" class="s17-m"><div class="hero ink">NOT</div><div class="hero lime">READY</div></div>
+              <div id="s17-m3" class="s17-m"><div class="hero ink">MOTION</div><div class="hero lime">GRAPHICS</div></div>
+              <div id="s17-m4" class="s17-m"><div class="hero lime" style="font-size: 96px; transform: skewX(-12deg)">HYPERFRAMES</div></div>
+              <div id="s17-m5" class="s17-m g"><div class="hero">STRETCH.</div></div>
+              <div id="s17-m6" class="s17-m"><div class="hero ink">HELL</div><div class="hero lime">YES.</div></div>
+              <div id="s17-m7" class="s17-m"><div class="hero ink" style="font-size: 110px">YOUR</div><div class="hero lime" style="font-size: 110px">WORKFLOW</div></div>
+            </div>
+            <div id="s17-bar"><div id="s17-fill"></div></div>
+            <div id="s17-tc" class="mono">00:<span id="s17-sec">00</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s17");
+      const A = c(16, 3) - 0.1, Z = c(16, 7) + 0.3, OUT = 2.18;
+      K.drift(tl, "#s17-drift", 2.4, { rotationY: -9, rotationX: 4 }, { rotationY: 8, rotationX: -3 });
+      tl.fromTo("#s17-world", { scale: 0.45, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out" }, 0);
+      // the film so far, scrubbed at speed inside its own player
+      const step = (Z - A) / 7;
+      for (let i = 1; i <= 7; i++) {
+        const m = "#s17-m" + i, t = A + (i - 1) * step;
+        tl.set(m, { opacity: 1 }, t); if (i < 7) tl.set(m, { opacity: 0 }, t + step);
+        tl.fromTo(m, { scale: 1.5, x: 140 }, { scale: 1, x: 0, duration: step * 0.7, ease: "expo.out", immediateRender: false }, t);
+      }
+      const sec = document.getElementById("s17-sec");
+      tl.fromTo("#s17-fill", { scaleX: 0 }, { scaleX: 1, duration: Z - A, ease: "none" }, A);
+      K.track(tl, [[A, 0], [Z, 54]], (v) => { const s = String(Math.round(v)).padStart(2, "0"); if (sec.textContent !== s) sec.textContent = s; });
+      // the player folds down to a single point: the idea it all started from
+      tl.to("#s17-world", { scale: 0.03, x: -630, y: 260, opacity: 0.6, duration: 0.2, ease: "power3.in" }, OUT);
+      window.__timelines["s17"] = tl;
+    })();
+  </script>
+</template>

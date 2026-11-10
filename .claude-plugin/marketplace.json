@@ -70,6 +70,32 @@
       "homepage": "https://github.com/CreatorGhost/ghost-skills",
       "version": "1.0.0",
       "keywords": ["dubbing", "video", "ai-dubbing", "recap", "audio-video-sync", "isochrony", "isometric-translation", "subtitle-ocr", "asr", "tts", "deepgram", "whisper", "rapidocr", "demucs", "translation", "chinese", "faceless-youtube", "lip-sync", "voiceover", "manhua", "donghua"]
+    },
+    {
+      "name": "unslop",
+      "source": "./plugins/unslop",
+      "description": "Edit prose to remove common signs of AI-generated writing while preserving meaning, tone, and a distinct human voice. Catches puffery, filler, vague claims, canned transitions, forced lists, jargon, passive constructions, and formatting habits that make text feel machine-made.",
+      "author": {
+        "name": "Aditya Pratap Singh",
+        "email": "adityapratap2307@gmail.com"
+      },
+      "category": "writing",
+      "homepage": "https://github.com/CreatorGhost/ghost-skills",
+      "version": "1.0.0",
+      "keywords": ["writing", "editing", "humanize", "plain-language", "style", "ai-writing"]
+    },
+    {
+      "name": "open-katana",
+      "source": "./plugins/open-katana",
+      "description": "Katana-style kinetic motion graphics without Higgsfield or After Effects: a script becomes a narrated, word-synced motion piece (extruded hero type, a comet that draws and types, blade slices that cut layouts apart, a 3D camera tunnel, glitch exits, diagrams that wire themselves) built in HyperFrames (HTML + GSAP) and rendered to MP4. Ships the motion kit, voice and word-timing scripts, 15 reusable scene types, and a complete 19-scene film as the worked example.",
+      "author": {
+        "name": "Aditya Pratap Singh",
+        "email": "adityapratap2307@gmail.com"
+      },
+      "category": "content",
+      "homepage": "https://github.com/CreatorGhost/ghost-skills",
+      "version": "1.0.0",
+      "keywords": ["motion-graphics", "kinetic-typography", "hyperframes", "gsap", "video", "animation", "explainer", "youtube", "tts", "katana"]
     }
   ]
 }

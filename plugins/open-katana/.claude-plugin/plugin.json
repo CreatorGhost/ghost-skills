@@ -1,0 +1,11 @@
+{
+  "name": "open-katana",
+  "version": "1.0.0",
+  "description": "Katana-style kinetic motion graphics without Higgsfield: a script becomes a narrated, word-synced motion piece built in HyperFrames (HTML + GSAP) and rendered to MP4.",
+  "author": {
+    "name": "Aditya Pratap Singh",
+    "email": "adityapratap2307@gmail.com"
+  },
+  "homepage": "https://github.com/CreatorGhost/ghost-skills",
+  "keywords": ["motion-graphics", "kinetic-typography", "hyperframes", "gsap", "video", "animation", "explainer", "youtube", "tts", "katana"]
+}

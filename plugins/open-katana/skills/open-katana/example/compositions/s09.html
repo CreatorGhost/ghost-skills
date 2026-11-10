@@ -1,0 +1,84 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    .s09-mini { left: 110px; top: 480px; width: 420px; height: 130px; }
+    .s09-mini i { position: absolute; left: 28px; height: 14px; border-radius: 4px; background: var(--lime); box-shadow: 0 0 12px rgba(198, 243, 31, .5); }
+    .s09-mini-tag { left: 110px; top: 442px; }
+    .s09-you { left: 110px; top: 636px; color: var(--ink); }
+    .s09-you b { color: var(--lime); font-weight: 700; }
+    .s09-w1 { left: 530px; top: 543px; width: 170px; }
+    .s09-node { left: 700px; top: 458px; width: 420px; height: 174px; display: flex; align-items: center; justify-content: center; }
+    .s09-node b { font-family: "Archivo Black", sans-serif; font-weight: 400; font-size: 46px; color: var(--lime); transform: skewX(-10deg); text-shadow: 0 0 22px rgba(198, 243, 31, .6); }
+    .s09-node-tag { left: 700px; top: 420px; }
+    .s09-trunk { left: 1120px; top: 543px; width: 90px; }
+    .s09-up { left: 1208px; top: 215px; height: 330px; }
+    .s09-down { left: 1208px; top: 545px; height: 330px; }
+    .s09-br { left: 1210px; width: 54px; }
+    .s09-item { left: 1264px; width: 480px; height: 92px; display: flex; align-items: center; gap: 22px; padding-left: 24px; }
+    .s09-item s { width: 44px; height: 44px; border: 4px solid var(--lime); border-radius: 8px; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+    .s09-item s u { text-decoration: none; color: #0b1400; background: var(--lime); width: 100%; height: 100%; font: 700 30px/36px "JetBrains Mono", monospace; text-align: center; }
+    .s09-item b { font-family: "Archivo Black", sans-serif; font-weight: 400; font-size: 32px; color: var(--ink); white-space: nowrap; }
+  </style>
+  <div id="root" data-composition-id="s09" data-width="1920" data-height="1080">
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s09-drift" class="drift">
+        <div id="s09-world" class="world">
+          <div id="s09-gl" class="layer">
+            <div class="s09-mini-tag abs mono">■ PROMPT</div>
+            <div class="s09-mini panel"><i style="top: 26px; width: 340px"></i><i style="top: 58px; width: 260px"></i><i style="top: 90px; width: 140px"></i></div>
+            <div id="s09-you" class="s09-you abs mono">YOU: <b>CHILLING.</b></div>
+            <div id="s09-w1" class="s09-w1 line i"></div>
+            <div id="s09-node-tag" class="s09-node-tag abs mono l">■ ENGINE</div>
+            <div id="s09-node" class="s09-node panel lm"><b>HYPERFRAMES</b></div>
+            <div id="s09-trunk" class="s09-trunk line"></div>
+            <div id="s09-up" class="s09-up vline"></div>
+            <div id="s09-down" class="s09-down vline"></div>
+            <div id="s09-b1" class="s09-br line" style="top: 213px"></div><div id="s09-i1" class="s09-item panel lm" style="top: 169px"><s><u id="s09-k1">✓</u></s><b>STORYBOARD</b></div>
+            <div id="s09-b2" class="s09-br line" style="top: 345px"></div><div id="s09-i2" class="s09-item panel lm" style="top: 301px"><s><u id="s09-k2">✓</u></s><b>KINETIC TYPE</b></div>
+            <div id="s09-b3" class="s09-br line" style="top: 477px"></div><div id="s09-i3" class="s09-item panel lm" style="top: 433px"><s><u id="s09-k3">✓</u></s><b>SHAPES + 3D</b></div>
+            <div id="s09-b4" class="s09-br line" style="top: 609px"></div><div id="s09-i4" class="s09-item panel lm" style="top: 565px"><s><u id="s09-k4">✓</u></s><b>CAMERA</b></div>
+            <div id="s09-b5" class="s09-br line" style="top: 741px"></div><div id="s09-i5" class="s09-item panel lm" style="top: 697px"><s><u id="s09-k5">✓</u></s><b>TIMING</b></div>
+            <div id="s09-b6" class="s09-br line" style="top: 873px"></div><div id="s09-i6" class="s09-item panel lm" style="top: 829px"><s><u id="s09-k6">✓</u></s><b>RENDER</b></div>
+          </div>
+          <div id="s09-burst" class="burst"></div>
+        </div>
+      </div>
+      <div id="s09-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s09"); const strips = K.bands("#s09-gl", 8);
+      const NAME = c(7, 1) + 0.08, T0 = NAME + 0.16, STEP = 0.16, GL = 2.0;
+      K.drift(tl, "#s09-drift", 2.3, { rotationY: -8, rotationX: 4 }, { rotationY: 7, rotationX: -3 });
+      // the prompt box lands small on the left
+      tl.fromTo("#s09-world", { scale: 1.9, x: 900, opacity: 0, filter: "blur(16px)" }, { scale: 1, x: 0, opacity: 1, filter: "blur(0px)", duration: 0.32, ease: "expo.out" }, 0);
+      tl.fromTo("#s09-you", { opacity: 0 }, { opacity: 1, duration: 0.12 }, T0 + 0.3);
+      // into the engine
+      K.fly(tl, "#s09-comet", { x: 530, y: 545 }, { x: 700, y: 545 }, NAME - 0.16, 0.16, { ease: "power2.in" });
+      K.draw(tl, "#s09-w1", NAME - 0.16, 0.16, "power2.in");
+      tl.fromTo(["#s09-node", "#s09-node-tag"], { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.4)" }, NAME);
+      gsap.set("#s09-burst", { x: 910, y: 545 });
+      K.burst(tl, "#s09-burst", NAME + 0.02, { n: 20, r: 300, seed: 19 });
+      K.hit(tl, "[data-composition-id='s09'] .stage", NAME, 8);
+      // out the other side: the comet runs up the trunk, then down the bus, and every job it passes is wired in and ticked
+      K.fly(tl, "#s09-comet", { x: 1120, y: 545 }, { x: 1210, y: 545 }, T0, 0.1, { ease: "none", hide: false });
+      K.draw(tl, "#s09-trunk", T0, 0.1, "none");
+      K.fly(tl, "#s09-comet", { x: 1210, y: 545 }, { x: 1210, y: 215 }, T0 + 0.1, 0.14, { ease: "power2.out", hide: false });
+      tl.fromTo("#s09-up", { scaleY: 0, transformOrigin: "50% 100%" }, { scaleY: 1, duration: 0.14, ease: "power2.out" }, T0 + 0.1);
+      const A = T0 + 0.24;   // first item
+      K.fly(tl, "#s09-comet", { x: 1210, y: 215 }, { x: 1210, y: 875 }, A, STEP * 5, { ease: "none", linger: 0.2 });
+      tl.fromTo("#s09-down", { scaleY: 0, transformOrigin: "50% 0%" }, { scaleY: 1, duration: STEP * 2.5, ease: "none" }, A + STEP * 2.5);
+      for (let i = 1; i <= 6; i++) {
+        const t = A + (i - 1) * STEP;
+        K.draw(tl, "#s09-b" + i, t, 0.08, "none");
+        tl.fromTo("#s09-i" + i, { scaleX: 0, opacity: 0, transformOrigin: "0 50%" }, { scaleX: 1, opacity: 1, duration: 0.24, ease: "back.out(1.7)" }, t + 0.06);
+        tl.fromTo("#s09-k" + i, { scale: 0 }, { scale: 1, duration: 0.18, ease: "back.out(3)" }, t + 0.22);
+      }
+      // handed off: the diagram tears itself away
+      K.glitch(tl, "#s09-gl", strips, GL, 0.28);
+      window.__timelines["s09"] = tl;
+    })();
+  </script>
+</template>

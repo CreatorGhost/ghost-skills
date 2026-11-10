@@ -1,0 +1,60 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s08-l1 { left: 260px; top: 378px; width: 1400px; }
+    #s08-l2 { left: 260px; top: 708px; width: 1400px; transform-origin: 100% 50%; }
+    #s08-box { left: 260px; top: 380px; width: 1400px; height: 330px; }
+    #s08-tag { position: absolute; left: 36px; top: 24px; }
+    #s08-text { position: absolute; left: 60px; top: 92px; width: 1280px; height: 160px; font-size: 40px; }
+    #s08-a, #s08-b { left: 0; line-height: 60px; }
+    #s08-b { top: 78px; }
+    #s08-caret { left: 6px; top: 6px; width: 22px; height: 48px; }
+    #s08-key { right: 30px; bottom: 26px; width: 96px; height: 60px; font-size: 30px; }
+  </style>
+  <div id="root" data-composition-id="s08" data-width="1920" data-height="1080">
+    <div class="stage">
+      <div id="s08-drift" class="drift">
+        <div id="s08-world" class="world">
+          <div id="s08-box" class="panel">
+            <div id="s08-tag" class="mono l">■ PROMPT</div>
+            <div id="s08-text">
+              <div id="s08-a" class="code">a <span class="chip">glowing line</span> writes the <span class="chip">title</span>, the letters</div>
+              <div id="s08-b" class="code">stretch, the <span class="chip">camera flies</span> through.</div>
+              <div id="s08-caret" class="caret"></div>
+            </div>
+            <div id="s08-key" class="key">↵</div>
+          </div>
+          <div id="s08-l1" class="line"></div>
+          <div id="s08-l2" class="line"></div>
+        </div>
+      </div>
+      <div id="s08-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s08");
+      const YOU = c(6, 1) - 0.08, CLAUDE = c(6, 4), LIKE = c(6, 10), OUT = 3.2;
+      K.drift(tl, "#s08-drift", 3.4, { rotationY: 9, rotationX: 5 }, { rotationY: -8, rotationX: -2 });
+      tl.fromTo("#s08-world", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.36, ease: "expo.out" }, 0);
+      // two strokes of the comet become the top and bottom of a prompt box
+      K.fly(tl, "#s08-comet", { x: 200, y: 380 }, { x: 1660, y: 380 }, YOU, 0.26, { ease: "power2.inOut", hide: false });
+      K.draw(tl, "#s08-l1", YOU, 0.26, "power2.inOut");
+      K.fly(tl, "#s08-comet", { x: 1660, y: 380 }, { x: 1660, y: 710 }, YOU + 0.26, 0.1, { ease: "none", hide: false });
+      K.fly(tl, "#s08-comet", { x: 1660, y: 710 }, { x: 260, y: 710 }, YOU + 0.36, 0.26, { ease: "power2.inOut" });
+      K.draw(tl, "#s08-l2", YOU + 0.36, 0.26, "power2.inOut");
+      tl.fromTo("#s08-box", { opacity: 0 }, { opacity: 1, duration: 0.18, ease: "power2.out" }, YOU + 0.6);
+      tl.to(["#s08-l1", "#s08-l2"], { opacity: 0, duration: 0.25 }, YOU + 0.68);
+      // then it writes what the animation should do
+      K.typer(tl, [[YOU + 0.8, 0], [CLAUDE + 0.75, 43], [CLAUDE + 0.82, 43], [LIKE - 0.02, 77]],
+        [{ el: document.getElementById("s08-a"), len: 43 }, { el: document.getElementById("s08-b"), len: 34 }], document.getElementById("s08-caret"), 24, 78);
+      tl.fromTo("#s08-key", { backgroundColor: "rgba(198,243,31,0)", color: "#c6f31f" }, { backgroundColor: "#c6f31f", color: "#0b1400", duration: 0.08 }, LIKE + 0.06);
+      tl.fromTo("#s08-key", { scale: 1 }, { scale: 0.86, duration: 0.06, ease: "power2.in" }, LIKE + 0.06);
+      tl.to("#s08-key", { scale: 1, duration: 0.2, ease: "back.out(3)" }, LIKE + 0.12);
+      // carried across: the box shrinks toward where it will sit in the next diagram
+      tl.to("#s08-world", { scale: 0.3, x: -600, filter: "blur(10px)", opacity: 0, duration: 0.2, ease: "power3.in" }, OUT);
+      window.__timelines["s08"] = tl;
+    })();
+  </script>
+</template>

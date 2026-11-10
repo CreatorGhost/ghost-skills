@@ -1,0 +1,44 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    .cap { position: absolute; left: 150px; top: 148px; width: 1100px; font-family: "Inter", sans-serif; font-weight: 700; font-size: 36px; line-height: 1.5; color: #d6e3f8; }
+    .cap .w { display: inline-block; position: relative; margin-right: .26em; opacity: 0; }
+    .cap .w i { position: absolute; left: -.16em; right: -.16em; top: .08em; bottom: .04em; border-radius: 6px; background: var(--lime); box-shadow: 0 0 22px rgba(198, 243, 31, .55); opacity: 0; transform-origin: 0 50%; }
+    .cap .w b { position: relative; font-weight: 700; }
+  </style>
+  <div id="root" data-composition-id="cap" data-width="1920" data-height="1080">
+    <!-- data-s = sentence number in vo/script.txt, data-from = its first word shown here -->
+    <div id="cap-02" class="cap clip" data-start="1.8" data-duration="1.9" data-track-index="1" data-s="2" data-from="1">You are not ready for this.</div>
+    <div id="cap-03a" class="cap clip" data-start="3.8" data-duration="1.58" data-track-index="1" data-s="3" data-from="1">I made these motion graphics</div>
+    <div id="cap-03b" class="cap clip" data-start="5.4" data-duration="2.05" data-track-index="1" data-s="3" data-from="6">without even opening After Effects.</div>
+    <div id="cap-04" class="cap clip" data-start="8.0" data-duration="3.4" data-track-index="1" data-s="4" data-from="3">this isn't an MCP controlling After Effects.</div>
+    <div id="cap-06" class="cap clip" data-start="13.85" data-duration="3.25" data-track-index="1" data-s="6" data-from="1">You describe to Claude what the animation should look like.</div>
+    <div id="cap-07" class="cap clip" data-start="17.2" data-duration="2.2" data-track-index="1" data-s="7" data-from="1">HyperFrames handles the rest.</div>
+    <div id="cap-08" class="cap clip" data-start="19.5" data-duration="1.7" data-track-index="1" data-s="8" data-from="1">I gave it this prompt:</div>
+    <div id="cap-11" class="cap clip" data-start="30.7" data-duration="2.0" data-track-index="1" data-s="11" data-from="1">That seamless camera movement.</div>
+    <div id="cap-12" class="cap clip" data-start="32.8" data-duration="1.25" data-track-index="1" data-s="12" data-from="1">And that transition?</div>
+    <div id="cap-16" class="cap clip" data-start="45.15" data-duration="2.3" data-track-index="1" data-s="16" data-from="1">And this entire piece you just watched,</div>
+    <div id="cap-17" class="cap clip" data-start="47.55" data-duration="2.45" data-track-index="1" data-s="17" data-from="1">From the first idea to the final frame.</div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      // each word shows when it is spoken and wears the highlight until the next one
+      document.querySelectorAll("#root .cap, [data-composition-id='cap'] .cap").forEach((cap) => {
+        if (cap.dataset.built) return; cap.dataset.built = 1;
+        const words = cap.textContent.trim().split(/\s+/); const spoken = window.VO.W[+cap.dataset.s - 1]; const from = +cap.dataset.from - 1;
+        const end = +cap.dataset.start + +cap.dataset.duration; cap.textContent = "";
+        const t = words.map((_, i) => Math.max(+cap.dataset.start + 0.02, (spoken[from + i] || spoken[spoken.length - 1])[1] - 0.05));
+        words.forEach((w, i) => {
+          const s = document.createElement("span"); s.className = "w"; s.innerHTML = "<i></i><b></b>"; s.lastChild.textContent = w; cap.appendChild(s);
+          const next = i + 1 < words.length ? t[i + 1] : end;
+          tl.set(s, { opacity: 1 }, t[i]);
+          tl.fromTo(s.firstChild, { scaleX: 0, opacity: 1 }, { scaleX: 1, duration: 0.08, ease: "power3.out" }, t[i]);
+          tl.fromTo(s.lastChild, { color: "#0b1400" }, { color: "#d6e3f8", duration: 0.08 }, next);
+          tl.to(s.firstChild, { opacity: 0, duration: 0.08 }, next);
+        });
+      });
+      window.__timelines["cap"] = tl;
+    })();
+  </script>
+</template>

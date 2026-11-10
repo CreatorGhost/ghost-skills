@@ -1,0 +1,49 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    .s13-back { position: absolute; left: -700px; top: -500px; width: 3320px; height: 2080px; background: radial-gradient(ellipse at 50% 45%, #0f1a36 0%, #0a1126 45%, #060a16 100%); opacity: 0; }
+    .s13-and { left: 470px; top: 270px; font-size: 170px; }
+    .s13-and span { margin-right: .22em; }
+    .s13-tr { left: 190px; top: 470px; font-size: 200px; }
+    .s13-clip { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  </style>
+  <div id="root" data-composition-id="s13" data-width="1920" data-height="1080">
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s13-drift" class="drift">
+        <div id="s13-world" class="world">
+          <div id="s13-cutme" class="layer">
+            <div class="s13-back"></div>
+            <div class="s13-and abs hero ink"><span id="s13-w1">AND</span><span id="s13-w2">THAT</span></div>
+            <div id="s13-clip" class="s13-clip"><div id="s13-tr" class="s13-tr abs hero lime">TRANSITION?</div></div>
+          </div>
+          <div id="s13-burst" class="burst"></div>
+        </div>
+      </div>
+      <div id="s13-slash" class="slash"></div>
+      <div id="s13-comet" class="comet"><i class="tail"></i><i class="head"></i></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s13"); const twin = K.dup("#s13-cutme");
+      const TR = c(12, 3) - 0.04, CUT = 1.12;
+      K.drift(tl, "#s13-drift", 1.35, { rotationY: -16, rotationX: 6 }, { rotationY: 9, rotationX: -3 });
+      // arrives out of the tunnel
+      tl.fromTo("#s13-world", { scale: 0.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "expo.out" }, 0);
+      K.slam(tl, "#s13-w1", c(12, 1) - 0.03, { from: 2.2, d: 0.2 });
+      K.slam(tl, "#s13-w2", c(12, 2) - 0.03, { from: 2.2, d: 0.2 });
+      tl.fromTo("#s13-clip", { clipPath: "inset(-60px 100% -60px -60px)" }, { clipPath: "inset(-60px -5% -60px -60px)", duration: 0.3, ease: "power3.out" }, TR);
+      tl.fromTo("#s13-tr", { scaleX: 1.5, x: -120, transformOrigin: "0 50%" }, { scaleX: 1, x: 0, duration: 0.36, ease: "expo.out" }, TR);
+      // the transition itself: one cut, and the two halves of the shot slide off the next one
+      K.fly(tl, "#s13-comet", { x: -150, y: 1010 }, { x: 2080, y: 60 }, CUT - 0.13, 0.16, { ease: "none" });
+      K.slash(tl, "#s13-slash", 960, 540, -23, CUT - 0.04, { hold: 0.2, fade: 0.4 });
+      K.hit(tl, "[data-composition-id='s13'] .stage", CUT, 9);
+      gsap.set("#s13-burst", { x: 960, y: 540 });
+      K.burst(tl, "#s13-burst", CUT, { n: 14, r: 440, seed: 23 });
+      tl.set("#s13-world .s13-back", { opacity: 1 }, CUT);
+      K.cut(tl, "#s13-cutme", twin, CUT, { x: 960, y: 540, deg: -23, part: true, d: 0.44, gap: 10 });
+      window.__timelines["s13"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,47 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #s11-bg { position: absolute; inset: 0; background: var(--lime); }
+    .s11-t { color: #0b1400; text-shadow: .02em .026em 0 rgba(70, 100, 0, .55), .04em .052em 0 rgba(70, 100, 0, .4); }
+    #s11-small { left: 0; top: 250px; width: 1920px; text-align: center; font-size: 130px; }
+    #s11-small span { margin: 0 .12em; }
+    #s11-letters { left: 0; top: 420px; width: 1920px; text-align: center; font-size: 290px; }
+    #s11-stretch { left: 0; top: 390px; width: 1920px; text-align: center; font-size: 300px; }
+  </style>
+  <div id="root" data-composition-id="s11" data-width="1920" data-height="1080">
+    <div id="s11-bg"></div>
+    <div class="stage" data-layout-allow-overflow>
+      <div id="s11-world" class="world">
+        <div id="s11-small" class="abs hero s11-t"><span id="s11-w1">THE</span><span id="s11-w2">WAY</span><span id="s11-w3">THE</span></div>
+        <div id="s11-letters" class="abs hero s11-t">LETTERS</div>
+        <div id="s11-stretch" class="abs hero s11-t">STRETCH.</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const tl = gsap.timeline({ paused: true });
+      const c = K.cue("s11");
+      const LET = c(10, 4) - 0.04, STR = c(10, 5) - 0.04, OUT = 1.66;
+      // three small words stand up on the beat
+      [1, 2, 3].forEach((n) => tl.fromTo("#s11-w" + n, { scaleY: 0, scaleX: 1.6, transformOrigin: "50% 100%" }, { scaleY: 1, scaleX: 1, duration: 0.16, ease: "back.out(2.6)" }, c(10, n) - 0.04));
+      // LETTERS arrives stretched, one glyph after another
+      const L = K.split("#s11-letters");
+      tl.fromTo(L, { scaleX: 3.4, x: 260, opacity: 0, transformOrigin: "0 50%" }, { scaleX: 1, x: 0, opacity: 1, duration: 0.26, ease: "expo.out", stagger: 0.028 }, LET);
+      // both lines snap away and one word takes the frame, pulled wide then let go
+      tl.to(["#s11-small", "#s11-letters"], { scaleX: 0.1, opacity: 0, duration: 0.09, ease: "power3.in" }, STR - 0.09);
+      tl.fromTo("#s11-stretch", { scaleX: 4.6, opacity: 0, filter: "blur(18px)" }, { scaleX: 1, opacity: 1, filter: "blur(0px)", duration: 0.26, ease: "expo.out" }, STR);
+      // the glyphs pull apart and spring back (each letter moves on its own transform)
+      K.split("#s11-stretch").forEach((g, i, all) => {
+        const dx = (i - (all.length - 1) / 2) * 62;
+        tl.fromTo(g, { x: 0, scaleX: 1 }, { x: dx, scaleX: 1.22, duration: 0.2, ease: "power2.inOut" }, STR + 0.26);
+        tl.to(g, { x: 0, scaleX: 1, duration: 0.36, ease: "elastic.out(1, 0.5)" }, STR + 0.46);
+      });
+      // the colour closes like a shutter
+      tl.to("#s11-world", { scaleY: 0, duration: 0.14, ease: "power3.in" }, OUT);
+      tl.fromTo("#s11-bg", { clipPath: "inset(0% 0 0% 0)" }, { clipPath: "inset(50% 0 50% 0)", duration: 0.18, ease: "power3.in" }, OUT);
+      K.hit(tl, "[data-composition-id='s11'] .stage", STR, 10);
+      window.__timelines["s11"] = tl;
+    })();
+  </script>
+</template>
